@@ -9,6 +9,16 @@ QSC is building "the first fault-tolerant ecosystem for hybrid quantum / high-pe
 
 ## Software
 
+### [DM-Sim](https://github.com/ORNL-QCI/DM-Sim)
+
+GPU-cluster density-matrix simulator for noisy quantum circuits.
+
+- **Type:** simulator
+- **Primary institution(s):** Oak Ridge National Laboratory / Pacific Northwest National Laboratory
+- **Acknowledgment:** "This project is currently supported by the Quantum Science Center (QSC)." (README)
+- **License:** BSD-3-Clause
+- **Status:** active
+
 ### [FTCircuitBench](https://github.com/AdrianHarkness/FTCircuitBench)
 
 End-to-end benchmark suite for fault-tolerant compilation and architecture — Clifford+T synthesis (Gridsynth, Solovay-Kitaev) and Pauli-Based Computation pipelines.
@@ -33,6 +43,16 @@ Python library for constructing and benchmarking fault-tolerant primitives (memo
 - **License:** CC-BY-4.0
 - **Status:** active
 
+### [nwqec](https://github.com/pnnl/nwqec)
+
+Toolkit for fault-tolerant quantum circuit transpilation and T-count optimization.
+
+- **Type:** benchmark
+- **Primary institution(s):** Pacific Northwest National Laboratory
+- **Acknowledgment:** QSC (README); also C2QA (DE-SC0012704) — see [c2qa.md](c2qa.md)
+- **License:** MIT
+- **Status:** active
+
 ## Likely QSC-relevant (pending acknowledgment verification)
 
 The following ORNL-QCI projects are strong candidates — listed here for now until each one's paper or README is confirmed to acknowledge QSC specifically.
@@ -42,7 +62,6 @@ The following ORNL-QCI projects are strong candidates — listed here for now un
 - [qiree](https://github.com/ORNL-QCI/qiree) — QIR Execution Engine via LLVM
 - [TNQVM](https://github.com/ORNL-QCI/tnqvm) — Tensor-network QPU simulator for XACC
 - [ExaTN](https://github.com/ORNL-QCI/exatn) / [ExaTENSOR](https://github.com/ORNL-QCI/ExaTENSOR) — hierarchical tensor networks at exascale
-- [DM-Sim](https://github.com/ORNL-QCI/DM-Sim) — density-matrix simulator on GPU clusters
 - [SV-Sim](https://github.com/ORNL-QCI/SV-Sim) — scalable state-vector simulator using PGAS
 - [TriQ](https://github.com/ORNL-QCI/TriQ) — Scaffold backend compiler
 - [TISCC](https://github.com/ORNL-QCI/TISCC) — quantum-computing tooling (C++)

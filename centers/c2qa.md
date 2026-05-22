@@ -18,6 +18,16 @@ Qiskit extension for simulating hybrid boson-qubit systems — cavity-QED-style 
 - **License:** BSD-2-Clause
 - **Status:** active
 
+### [nwqec](https://github.com/pnnl/nwqec)
+
+Toolkit for fault-tolerant quantum circuit transpilation and T-count optimization.
+
+- **Type:** benchmark
+- **Primary institution(s):** Pacific Northwest National Laboratory
+- **Acknowledgment:** C2QA (DE-SC0012704); also QSC — see [qsc.md](qsc.md)
+- **License:** MIT
+- **Status:** active
+
 ### [QASMBench](https://github.com/pnnl/QASMBench)
 
 Low-level OpenQASM benchmark suite for NISQ evaluation and simulation.
