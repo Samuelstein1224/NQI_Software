@@ -658,6 +658,77 @@ footer .colophon {
   margin: 8px 0;
   line-height: 1.45;
 }
+
+/* Editable preview controls */
+.preview-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-bottom: 12px;
+}
+.preview-head h3 { margin: 0; }
+.preview-head .reset {
+  font-family: var(--f-mono); font-size: 10px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  background: none; border: none; cursor: pointer;
+  color: var(--accent); padding: 0;
+}
+.preview-head .reset:hover { text-decoration: underline; }
+
+.preview .v input[type=text],
+.preview .v input[type=url],
+.preview .v textarea,
+.preview .v select {
+  width: 100%;
+  font-family: var(--f-mono);
+  font-size: 12px;
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  padding: 6px 8px;
+  outline: none;
+  border-radius: 0;
+  transition: border-color .14s;
+}
+.preview .v input:focus,
+.preview .v textarea:focus,
+.preview .v select:focus { border-color: var(--ink); }
+.preview .v textarea { resize: vertical; min-height: 56px; line-height: 1.45; }
+.preview .v.row-wide { grid-column: 2 / -1; }
+
+.center-toggle {
+  display: flex; gap: 6px; flex-wrap: wrap;
+}
+.center-toggle .pill {
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--ink-2);
+  padding: 4px 9px;
+  cursor: pointer;
+  transition: all .12s;
+}
+.center-toggle .pill[aria-pressed="true"] {
+  background: var(--pill-bg, var(--ink));
+  color: var(--paper);
+  border-color: transparent;
+}
+.center-toggle .pill[aria-pressed="true"][data-center="QSA"] { color: var(--ink); }
+.center-toggle .pill[data-center="C2QA"]   { --pill-bg: var(--c-c2qa); }
+.center-toggle .pill[data-center="Q-NEXT"] { --pill-bg: var(--c-qnext); }
+.center-toggle .pill[data-center="QSA"]    { --pill-bg: var(--c-qsa); }
+.center-toggle .pill[data-center="QSC"]    { --pill-bg: var(--c-qsc); }
+.center-toggle .pill[data-center="SQMS"]   { --pill-bg: var(--c-sqms); }
+.center-toggle .pill:hover { border-color: var(--ink); color: var(--ink); }
+
+.status-flag {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--f-mono); font-size: 11px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink-2);
+}
+.status-flag input { accent-color: var(--accent); }
 .preview .err {
   color: var(--accent);
   font-size: 13.5px;
@@ -1392,33 +1463,110 @@ footer .colophon {
     submitBtn.disabled = true;
   }
 
+  const ALL_CENTERS = ["C2QA","Q-NEXT","QSA","QSC","SQMS"];
+  const TYPE_OPTIONS = ["control","simulator","benchmark","compiler","framework","library","dataset","other"];
+
+  // Holds the user-edited values (initialised from detection).
+  let edits = null;
+
   function renderPreview(r) {
     lastResult = r;
     submitBtn.disabled = false;
 
-    const centersHtml = r.centers.length
-      ? r.centers.map(c => `<span class="pill" data-center="${c}">${c}</span>`).join('')
-      : `<span class="none">none detected — needs manual review</span>`;
-    const grantsHtml = r.grants.length
-      ? r.grants.map(g => `<code style="font-family:var(--f-mono);font-size:12px;">${escapeHtml(g)}</code>`).join(' · ')
-      : `<span class="none">none detected</span>`;
-    const ack = r.ackSnippet
-      ? `<div class="quote">${escapeHtml(r.ackSnippet).slice(0, 600)}${r.ackSnippet.length > 600 ? '…' : ''}</div>`
-      : `<span class="none">no acknowledgments section located in README</span>`;
+    // Initialise editable state from the detected values.
+    edits = {
+      description: r.description || '',
+      license: r.license || '',
+      type: r.inferredType,
+      centers: new Set(r.centers),
+      grant: r.grants[0] || '',
+      status: r.centers.length ? 'active' : 'pending',
+      topics: '',
+      ack: r.ackSnippet || '',
+    };
 
     preview.classList.add('shown');
     preview.innerHTML = `
-      <h3>Detected fields — review before submitting</h3>
-      <div class="row"><span class="k">Repository</span><span class="v"><a href="${escapeHtml(r.url)}" target="_blank" rel="noopener">${escapeHtml(r.owner)}/${escapeHtml(r.name)}</a></span></div>
-      <div class="row"><span class="k">Description</span><span class="v">${escapeHtml(r.description || '—')}</span></div>
-      <div class="row"><span class="k">License</span><span class="v">${escapeHtml(r.license || '—')}</span></div>
-      <div class="row"><span class="k">Language</span><span class="v">${escapeHtml(r.language || '—')}</span></div>
-      <div class="row"><span class="k">Inferred type</span><span class="v">${escapeHtml(r.inferredType)}</span></div>
-      <div class="row"><span class="k">NQI centers</span><span class="v">${centersHtml}</span></div>
-      <div class="row"><span class="k">DOE grants</span><span class="v">${grantsHtml}</span></div>
-      <div class="row"><span class="k">Ack. excerpt</span><span class="v">${ack}</span></div>
-      <div class="row"><span class="k">Stars · updated</span><span class="v">${r.stars ?? '—'} · ${r.updated || '—'}</span></div>
+      <div class="preview-head">
+        <h3>Detected fields — edit before submitting</h3>
+        <button type="button" class="reset" id="resetEdits">↻ Reset to detected</button>
+      </div>
+
+      <div class="row">
+        <span class="k">Repository</span>
+        <span class="v"><a href="${escapeHtml(r.url)}" target="_blank" rel="noopener">${escapeHtml(r.owner)}/${escapeHtml(r.name)}</a> &nbsp;·&nbsp; <span style="color:var(--ink-3)">${r.stars ?? '—'}★ &nbsp;${r.updated || '—'} &nbsp;${escapeHtml(r.language || '')}</span></span>
+      </div>
+
+      <div class="row">
+        <span class="k">Description</span>
+        <span class="v row-wide"><textarea name="f-description" rows="2">${escapeHtml(edits.description)}</textarea></span>
+      </div>
+
+      <div class="row">
+        <span class="k">License</span>
+        <span class="v"><input type="text" name="f-license" value="${escapeHtml(edits.license)}" placeholder="MIT, BSD-3-Clause, Apache-2.0, …"></span>
+      </div>
+
+      <div class="row">
+        <span class="k">Type</span>
+        <span class="v">
+          <select name="f-type">
+            ${TYPE_OPTIONS.map(t => `<option value="${t}" ${t === edits.type ? 'selected' : ''}>${t}</option>`).join('')}
+          </select>
+        </span>
+      </div>
+
+      <div class="row">
+        <span class="k">NQI centers</span>
+        <span class="v">
+          <div class="center-toggle" id="centerToggle">
+            ${ALL_CENTERS.map(c => `<button type="button" class="pill" data-center="${c}" aria-pressed="${edits.centers.has(c)}">${c}</button>`).join('')}
+          </div>
+        </span>
+      </div>
+
+      <div class="row">
+        <span class="k">DOE grant</span>
+        <span class="v"><input type="text" name="f-grant" value="${escapeHtml(edits.grant)}" placeholder="DE-SC0012704 (optional)"></span>
+      </div>
+
+      <div class="row">
+        <span class="k">Status</span>
+        <span class="v">
+          <label class="status-flag"><input type="radio" name="f-status" value="active" ${edits.status==='active'?'checked':''}> Active &nbsp;<span style="color:var(--ink-3)">(verified)</span></label>
+          &nbsp;&nbsp;
+          <label class="status-flag"><input type="radio" name="f-status" value="pending" ${edits.status==='pending'?'checked':''}> Pending &nbsp;<span style="color:var(--ink-3)">(needs review)</span></label>
+        </span>
+      </div>
+
+      <div class="row">
+        <span class="k">Topics</span>
+        <span class="v"><input type="text" name="f-topics" value="${escapeHtml(edits.topics)}" placeholder="Fault Tolerance, Control & Pulse, …"></span>
+      </div>
+
+      <div class="row">
+        <span class="k">Ack. excerpt</span>
+        <span class="v row-wide"><textarea name="f-ack" rows="5" placeholder="Paste or edit the acknowledgments / funding excerpt from the README or paper.">${escapeHtml(edits.ack)}</textarea></span>
+      </div>
     `;
+
+    // Wire change handlers
+    preview.querySelector('[name=f-description]').addEventListener('input', e => edits.description = e.target.value);
+    preview.querySelector('[name=f-license]').addEventListener('input', e => edits.license = e.target.value);
+    preview.querySelector('[name=f-type]').addEventListener('change', e => edits.type = e.target.value);
+    preview.querySelector('[name=f-grant]').addEventListener('input', e => edits.grant = e.target.value);
+    preview.querySelector('[name=f-topics]').addEventListener('input', e => edits.topics = e.target.value);
+    preview.querySelector('[name=f-ack]').addEventListener('input', e => edits.ack = e.target.value);
+    preview.querySelectorAll('[name=f-status]').forEach(r => r.addEventListener('change', e => edits.status = e.target.value));
+    preview.querySelectorAll('#centerToggle .pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const c = btn.dataset.center;
+        if (edits.centers.has(c)) edits.centers.delete(c);
+        else edits.centers.add(c);
+        btn.setAttribute('aria-pressed', edits.centers.has(c) ? 'true' : 'false');
+      });
+    });
+    preview.querySelector('#resetEdits').addEventListener('click', () => renderPreview(r));
   }
 
   async function analyze() {
@@ -1463,34 +1611,49 @@ footer .colophon {
   }
 
   function openIssue() {
-    if (!lastResult) return;
+    if (!lastResult || !edits) return;
     const r = lastResult;
-    const ackBlock = r.ackSnippet
-      ? `\n> ${r.ackSnippet.replace(/\n/g, '\n> ').slice(0, 1200)}\n`
-      : '\n_No acknowledgments section located in README._\n';
+    const centersArr = Array.from(edits.centers);
+    const topicsArr = edits.topics
+      .split(',').map(s => s.trim()).filter(Boolean);
+
+    const ackBlock = edits.ack
+      ? `\n> ${edits.ack.replace(/\n/g, '\n> ').slice(0, 1500)}\n`
+      : '\n_No acknowledgments excerpt provided._\n';
+
     const entry = {
       id: r.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
       name: r.name,
-      tagline: r.description?.slice(0, 80) || "",
-      description: r.description || "",
+      tagline: edits.description.slice(0, 80) || "",
+      description: edits.description,
       url: r.url,
-      centers: r.centers,
+      centers: centersArr,
       primary_institutions: [],
-      type: r.inferredType,
-      license: r.license || "see repo",
-      status: r.centers.length ? "active" : "pending",
-      verified: r.centers.length > 0,
-      grant: r.grants[0] || undefined,
+      type: edits.type,
+      license: edits.license || "see repo",
+      status: edits.status,
+      verified: edits.status === 'active' && centersArr.length > 0,
+      grant: edits.grant || undefined,
+      topics: topicsArr.length ? topicsArr : undefined,
     };
+    // Strip undefined keys for cleaner JSON
+    Object.keys(entry).forEach(k => entry[k] === undefined && delete entry[k]);
+
+    const detectedSummary = [
+      `_Detected by auto-analysis:_ centers=${r.centers.join(',')||'none'}, grants=${r.grants.join(',')||'none'}, type=${r.inferredType}`,
+      `_Submitter-edited:_ centers=${centersArr.join(',')||'none'}, status=${edits.status}, type=${edits.type}`,
+    ].join('\n');
 
     const body = [
       `**Repository:** ${r.url}`,
-      `**Description:** ${r.description || '—'}`,
-      `**License:** ${r.license || '—'}`,
+      `**Description:** ${edits.description || '—'}`,
+      `**License:** ${edits.license || '—'}`,
       `**Language:** ${r.language || '—'}`,
-      `**Inferred type:** ${entry.type}`,
-      `**Detected NQI centers:** ${r.centers.length ? r.centers.join(', ') : '_none detected — needs human review_'}`,
-      `**DOE grant numbers found:** ${r.grants.length ? r.grants.join(', ') : '_none_'}`,
+      `**Type:** ${edits.type}`,
+      `**NQI centers:** ${centersArr.length ? centersArr.join(', ') : '_none — needs maintainer review_'}`,
+      `**DOE grant:** ${edits.grant || '_none_'}`,
+      `**Status:** ${edits.status}`,
+      `**Topics:** ${topicsArr.join(', ') || '—'}`,
       ``,
       `### Acknowledgments excerpt`,
       ackBlock,
@@ -1499,10 +1662,12 @@ footer .colophon {
       JSON.stringify(entry, null, 2),
       '```',
       ``,
+      detectedSummary,
+      ``,
       `<!-- Submitted via the NQI Software archive submission form -->`,
     ].join('\n');
 
-    const title = `Add: ${r.name}` + (r.centers.length ? ` (${r.centers.join(', ')})` : ` — review needed`);
+    const title = `Add: ${r.name}` + (centersArr.length ? ` (${centersArr.join(', ')})` : ` — review needed`);
     const url = `https://github.com/${REPO}/issues/new?` +
       `labels=software-request&` +
       `title=${encodeURIComponent(title)}&` +
