@@ -502,7 +502,13 @@ footer .colophon {
   padding: 36px 40px 32px;
   box-shadow: 0 30px 60px -20px rgba(28,23,20,0.45);
   animation: modalIn .25s cubic-bezier(.2,.7,.3,1) both;
+  max-height: calc(100vh - 96px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--rule) transparent;
 }
+.modal::-webkit-scrollbar { width: 8px; }
+.modal::-webkit-scrollbar-thumb { background: var(--rule); }
 @keyframes modalIn {
   from { opacity: 0; transform: translateY(10px) scale(0.99); }
   to   { opacity: 1; transform: none; }
@@ -729,6 +735,30 @@ footer .colophon {
   color: var(--ink-2);
 }
 .status-flag input { accent-color: var(--accent); }
+
+.preview-submit {
+  display: flex; align-items: center; gap: 14px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--rule);
+}
+
+.callout {
+  background: var(--paper-3);
+  border-left: 3px solid var(--accent-soft);
+  padding: 10px 14px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-2);
+  margin: 0 0 16px;
+}
+.callout strong { color: var(--accent); font-weight: 500; }
+.preview-submit .hint {
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+}
 .preview .err {
   color: var(--accent);
   font-size: 13.5px;
@@ -880,9 +910,8 @@ footer .colophon {
     </div>
 
     <div class="modal-actions">
-      <button type="button" class="btn" id="analyzeBtn">Analyze</button>
-      <button type="button" class="btn btn-secondary" id="submitIssueBtn" disabled>Open issue</button>
-      <span class="hint">No login required to analyze · Issue opens on GitHub</span>
+      <button type="button" class="btn" id="analyzeBtn">Analyze repository</button>
+      <span class="hint">No login required · Uses the public GitHub API</span>
     </div>
 
     <div class="preview" id="preview"></div>
@@ -1331,7 +1360,8 @@ footer .colophon {
     { center: "SQMS",   re: /\bSQMS\b|Superconducting Quantum Materials and Systems|DE[-\s]?AC02[-\s]?07CH11359/i },
   ];
 
-  const GRANT_RE = /DE[-\s][A-Z]{2,4}\d{2,}[-\s]?[A-Z0-9]+|DE[-\s]?SC\d{7}|DE[-\s]?FOA[-\s]?\d{7}/g;
+  // DOE contract patterns — catch DE-AC02-07CH11359, DE-SC0012704, DE-FOA-0002253, etc.
+  const GRANT_RE = /\bDE[-\s][A-Z0-9]{2,6}(?:[-\s][A-Z0-9]+){1,3}\b/g;
 
   const TYPE_HINTS = [
     { type: "benchmark", re: /\bbenchmark|benchmarking|evaluation suite/i },
@@ -1341,6 +1371,31 @@ footer .colophon {
     { type: "framework", re: /\bSDK|framework|programming model/i },
   ];
 
+  // Topic keyword map — used to auto-suggest topics from README + description.
+  const TOPIC_RULES = [
+    { topic: "Fault Tolerance",     re: /fault[-\s]?toleran|\bqec\b|quantum error correction|surface code|color code|stabili[sz]er code|magic state/i },
+    { topic: "Quantum Networking",  re: /quantum network|quantum internet|entanglement distribution|repeater|teleport|photonic link/i },
+    { topic: "Bosonic / Hybrid",    re: /bosonic|continuous[-\s]variable|cavity[-\s]?QED|cat qubit|GKP|hybrid (qubit|boson)/i },
+    { topic: "Control & Pulse",     re: /pulse[-\s]?(shap|level|sequenc)|optimal control|waveform|cQED control|qubit control|readout/i },
+    { topic: "FPGA / Hardware",     re: /\bFPGA\b|RFSoC|ZCU|Xilinx|Zynq|PYNQ/i },
+    { topic: "Compilation",         re: /compil(er|ation|ing)|transpile|gate synthesis|gridsynth|solovay[-\s]?kitaev|QIR|qcor/i },
+    { topic: "Tensor Networks",     re: /tensor[-\s]?network|matrix[-\s]product[-\s]state|tensor[-\s]contraction|\bDMRG\b/i },
+    { topic: "HPC Simulation",      re: /\bHPC\b|exascale|distributed simulation|multi[-\s]?node|\bMPI\b|GPU cluster/i },
+    { topic: "Open Quantum Systems",re: /open quantum system|Lindblad|master equation|dissipat/i },
+    { topic: "Quantum Sensing",     re: /quantum sens|NV[-\s]centre|NV[-\s]center|magnetometry|defect (qubit|spin)/i },
+    { topic: "Benchmarking",        re: /benchmark|benchmarking suite/i },
+    { topic: "NISQ",                re: /\bNISQ\b|near[-\s]?term|noisy intermediate/i },
+  ];
+
+  function detectTopics(text) {
+    if (!text) return [];
+    const out = [];
+    for (const r of TOPIC_RULES) {
+      if (r.re.test(text)) out.push(r.topic);
+    }
+    return out;
+  }
+
   // DOM
   const $ = (s) => document.querySelector(s);
   const modal = $('#modal');
@@ -1348,7 +1403,6 @@ footer .colophon {
   const closeBtn = $('#closeSubmit');
   const urlInput = $('#repoUrl');
   const analyzeBtn = $('#analyzeBtn');
-  const submitBtn = $('#submitIssueBtn');
   const preview = $('#preview');
 
   let lastResult = null;
@@ -1362,7 +1416,6 @@ footer .colophon {
     preview.classList.remove('shown');
     preview.innerHTML = '';
     urlInput.value = '';
-    submitBtn.disabled = true;
     lastResult = null;
   }
 
@@ -1460,7 +1513,6 @@ footer .colophon {
   function renderError(message) {
     preview.classList.add('shown');
     preview.innerHTML = `<div class="err">${escapeHtml(message)}</div>`;
-    submitBtn.disabled = true;
   }
 
   const ALL_CENTERS = ["C2QA","Q-NEXT","QSA","QSC","SQMS"];
@@ -1471,7 +1523,6 @@ footer .colophon {
 
   function renderPreview(r) {
     lastResult = r;
-    submitBtn.disabled = false;
 
     // Initialise editable state from the detected values.
     edits = {
@@ -1481,7 +1532,7 @@ footer .colophon {
       centers: new Set(r.centers),
       grant: r.grants[0] || '',
       status: r.centers.length ? 'active' : 'pending',
-      topics: '',
+      topics: (r.inferredTopics || []).join(', '),
       ack: r.ackSnippet || '',
     };
 
@@ -1491,6 +1542,13 @@ footer .colophon {
         <h3>Detected fields — edit before submitting</h3>
         <button type="button" class="reset" id="resetEdits">↻ Reset to detected</button>
       </div>
+
+      ${r.centers.length === 0 ? `
+        <div class="callout">
+          <strong>No NQI center acknowledgment found</strong> in the README or repo description.
+          Toggle the correct centers manually and paste the acknowledgments excerpt from the
+          paper if available — a maintainer will verify before merging.
+        </div>` : ''}
 
       <div class="row">
         <span class="k">Repository</span>
@@ -1548,6 +1606,11 @@ footer .colophon {
         <span class="k">Ack. excerpt</span>
         <span class="v row-wide"><textarea name="f-ack" rows="5" placeholder="Paste or edit the acknowledgments / funding excerpt from the README or paper.">${escapeHtml(edits.ack)}</textarea></span>
       </div>
+
+      <div class="preview-submit">
+        <button type="button" class="btn" id="finalSubmit">Open pre-filled issue ↗</button>
+        <span class="hint">A maintainer reviews each request before it's merged into the archive.</span>
+      </div>
     `;
 
     // Wire change handlers
@@ -1567,6 +1630,7 @@ footer .colophon {
       });
     });
     preview.querySelector('#resetEdits').addEventListener('click', () => renderPreview(r));
+    preview.querySelector('#finalSubmit').addEventListener('click', () => { openIssue(); close(); });
   }
 
   async function analyze() {
@@ -1576,7 +1640,6 @@ footer .colophon {
       return;
     }
     analyzeBtn.disabled = true;
-    submitBtn.disabled = true;
     preview.classList.add('shown');
     preview.innerHTML = `<div><span class="spinner"></span> Fetching repository metadata…</div>`;
     try {
@@ -1585,9 +1648,11 @@ footer .colophon {
       preview.innerHTML = `<div><span class="spinner"></span> Scanning README for NQI acknowledgments…</div>`;
       const readme = await fetchReadme(parsed.owner, parsed.repo, branch);
 
-      const centers = detectCenters(readme + ' ' + (repo.description || ''));
-      const grants = detectGrants(readme);
-      const inferredType = detectType(readme + ' ' + (repo.description || '') + ' ' + (repo.topics || []).join(' '));
+      const combinedText = (repo.description || '') + ' ' + (repo.topics || []).join(' ') + ' ' + readme;
+      const centers = detectCenters(combinedText);
+      const grants = detectGrants(combinedText);
+      const inferredType = detectType(combinedText);
+      const inferredTopics = detectTopics(combinedText);
       const ackSnippet = findAckSnippet(readme);
 
       renderPreview({
@@ -1601,7 +1666,7 @@ footer .colophon {
         updated: (repo.pushed_at || '').slice(0, 10),
         topics: repo.topics || [],
         readmeLength: readme.length,
-        centers, grants, inferredType, ackSnippet,
+        centers, grants, inferredType, inferredTopics, ackSnippet,
       });
     } catch (err) {
       renderError(err.message || 'Could not analyze that repository.');
@@ -1677,7 +1742,6 @@ footer .colophon {
 
   analyzeBtn.addEventListener('click', analyze);
   urlInput.addEventListener('keydown', e => { if (e.key === 'Enter') analyze(); });
-  submitBtn.addEventListener('click', openIssue);
 })();
 </script>
 
