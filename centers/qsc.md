@@ -9,9 +9,29 @@ QSC is building "the first fault-tolerant ecosystem for hybrid quantum / high-pe
 
 ## Software
 
-### [QASMBench](https://github.com/pnnl/QASMBench) (cross-listed)
+### [FTCircuitBench](https://github.com/AdrianHarkness/FTCircuitBench)
 
-Listed primarily under [C2QA](c2qa.md). Also referenced in QSC benchmarking contexts.
+End-to-end benchmark suite for fault-tolerant compilation and architecture — Clifford+T synthesis (Gridsynth, Solovay-Kitaev) and Pauli-Based Computation pipelines.
+
+- **Type:** benchmark
+- **Primary institution(s):** PNNL, Lehigh, Fordham, MIT
+- **Authors:** Harkness, Kan, Liu, Wang, Martyn, Xu, Chamaki, Decker, Mao, Zuluaga, Terlaky, Li, Stein
+- **Acknowledgment:** QSC
+- **Paper:** [arXiv:2601.03185](https://arxiv.org/abs/2601.03185)
+- **License:** MIT
+- **Status:** active
+
+### [FTPrimitiveBench](https://github.com/ShuwenKan/FTPrimitiveBench)
+
+Python library for constructing and benchmarking fault-tolerant primitives (memory, transversal H, lattice surgery, logical S) on the rotated surface code under structured / hardware-motivated noise.
+
+- **Type:** benchmark
+- **Primary institution(s):** PNNL, Fordham
+- **Authors:** Kan, Harkness, Du, Rofougaran, Garner, Liu, Mao, Stein
+- **Acknowledgment:** QSC
+- **Paper:** [arXiv:2605.04049](https://arxiv.org/abs/2605.04049)
+- **License:** CC-BY-4.0
+- **Status:** active
 
 ## Likely QSC-relevant (pending acknowledgment verification)
 

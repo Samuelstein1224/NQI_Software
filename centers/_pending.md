@@ -12,24 +12,6 @@ Software believed to be NQI-affiliated but where the formal acknowledgment in th
 
 ## Candidates
 
-### [FTPrimitiveBench](https://github.com/ShuwenKan/FTPrimitiveBench)
-
-Python library for constructing and benchmarking fault-tolerant primitives under hardware-motivated noise.
-
-- **Paper:** [arXiv:2605.04049](https://arxiv.org/abs/2605.04049)
-- **Authors:** Shuwen Kan, Adrian Harkness, Zefan Du, Rod Rofougaran, Sean Garner, Chenxu Liu, Ying Mao, Samuel Stein
-- **License:** CC-BY-4.0
-- **Verify:** check author affiliations + acknowledgments section of the arXiv PDF for C2QA / PNNL / other DOE center citations
-
-### [FTCircuitBench](https://github.com/AdrianHarkness/FTCircuitBench)
-
-Benchmark suite for fault-tolerant quantum compilation and architecture (Clifford+T, PBC).
-
-- **Paper:** [arXiv:2601.03185](https://arxiv.org/abs/2601.03185)
-- **Authors:** Adrian Harkness, Shuwen Kan, Chenxu Liu, Meng Wang, John M. Martyn, Shifan Xu, Diana Chamaki, Ethan Decker, Ying Mao, Luis F. Zuluaga, Tamás Terlaky, Ang Li, Samuel Stein
-- **License:** MIT
-- **Verify:** Chenxu Liu and Ang Li are at PNNL (a C2QA partner) — likely C2QA acknowledgment, needs confirmation
-
 ### ORNL-QCI repositories
 
 See [qsc.md](qsc.md) for the list of XACC / QCOR / qiree / TNQVM / DM-Sim / SV-Sim / Quandary / QuaC etc., each needing its README + paper checked.

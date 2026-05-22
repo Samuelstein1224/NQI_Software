@@ -29,14 +29,6 @@ Low-level OpenQASM benchmark suite for NISQ evaluation and simulation.
 - **License:** BSD-3-Clause
 - **Status:** active
 
-### [Qiskit](https://github.com/Qiskit/qiskit) (partial support)
-
-The Qiskit SDK itself receives partial support from C2QA under `DE-SC0012704`, per the project's funding acknowledgments. Listed here for completeness — Qiskit is not a C2QA-led project.
-
-- **Type:** SDK / framework
-- **License:** Apache-2.0
-- **Status:** active
-
 ## Pending verification
 
 Entries here are awaiting confirmation that they cite C2QA in their paper or README — see [_pending.md](_pending.md).

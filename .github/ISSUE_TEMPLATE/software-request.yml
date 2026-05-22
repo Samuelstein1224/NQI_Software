@@ -1,0 +1,36 @@
+name: Software addition request
+description: Suggest a new NQI-affiliated software entry for the archive
+title: "Add: <name>"
+labels: ["software-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Submitting via the archive's “Request software addition” modal pre-fills the fields below.
+        Otherwise, paste the GitHub URL and the proposed JSON entry — a maintainer will verify
+        the NQI center acknowledgment from the project's paper / README before merging.
+  - type: input
+    id: repo
+    attributes:
+      label: GitHub URL
+      placeholder: https://github.com/org/repo
+    validations:
+      required: true
+  - type: textarea
+    id: body
+    attributes:
+      label: Auto-analysis output (or notes)
+      description: |
+        The site auto-fills this with detected centers, grants, and an acknowledgment excerpt.
+        Add any extra context here — e.g. paper, author affiliations, why the entry belongs.
+      render: markdown
+    validations:
+      required: false
+  - type: dropdown
+    id: status
+    attributes:
+      label: Proposed status
+      options:
+        - active (NQI funding confirmed)
+        - pending (needs maintainer verification)
+      default: 1
