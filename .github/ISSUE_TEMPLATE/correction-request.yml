@@ -1,0 +1,32 @@
+name: Correction to existing entry
+description: Suggest a change to an existing archive entry (centers, status, description, etc.)
+title: "Update: <entry name>"
+labels: ["correction-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Submitting via the archive's per-card three-dot menu pre-fills the fields below.
+        Otherwise, name the entry and describe what should change — a maintainer reviews
+        each correction before merging.
+  - type: input
+    id: entry-id
+    attributes:
+      label: Entry ID or name
+      placeholder: "qick · or · bosonic-qiskit"
+    validations:
+      required: true
+  - type: textarea
+    id: reason
+    attributes:
+      label: What's wrong / what should change?
+      placeholder: "e.g., Center should be SQMS not QSC — paper acknowledges DE-AC02-07CH11359."
+    validations:
+      required: true
+  - type: textarea
+    id: json
+    attributes:
+      label: Updated JSON entry (optional)
+      description: |
+        A drop-in replacement JSON object for the entry, if you have one.
+      render: json

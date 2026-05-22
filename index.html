@@ -302,7 +302,52 @@ a:hover { color: var(--accent); border-color: var(--accent); }
   display: flex; justify-content: space-between; align-items: flex-start;
   gap: 12px;
   margin-bottom: 10px;
+  padding-right: 22px;       /* room for the kebab menu */
 }
+
+.card-menu {
+  position: absolute;
+  top: 16px; right: 12px;
+  background: transparent; border: none;
+  cursor: pointer;
+  color: var(--ink-3);
+  font-size: 18px;
+  line-height: 1;
+  padding: 4px 6px;
+  border-radius: 2px;
+  letter-spacing: 0.1em;
+  transition: color .12s, background .12s;
+}
+.card-menu:hover { color: var(--ink); background: var(--paper-3); }
+.card-menu:focus-visible { outline: 1px solid var(--ink); outline-offset: 2px; }
+
+.card-menu-popover {
+  position: absolute;
+  top: 40px; right: 12px;
+  background: var(--paper-2);
+  border: 1px solid var(--ink);
+  box-shadow: 0 10px 26px -8px rgba(28,23,20,0.35);
+  z-index: 3;
+  min-width: 220px;
+  padding: 4px 0;
+  display: none;
+}
+.card-menu-popover.open { display: block; animation: fadeIn .14s ease both; }
+.card-menu-popover button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.card-menu-popover button:hover { background: var(--ink); color: var(--paper); }
 .card-num {
   font-family: var(--f-mono);
   font-size: 10px;
@@ -896,7 +941,7 @@ footer .colophon {
       <h2 id="modalTitle">Request <em>software</em> addition</h2>
       <button type="button" class="modal-close" id="closeSubmit" aria-label="Close">Esc · Close</button>
     </div>
-    <p class="modal-intro">
+    <p class="modal-intro" id="modalIntro">
       Paste a GitHub URL. We'll fetch the repository's README, license, and metadata,
       look for explicit acknowledgments of the five NQI centers (C2QA, Q-NEXT, QSA, QSC,
       SQMS) and known DOE contract numbers, then preview a structured entry.
@@ -904,14 +949,16 @@ footer .colophon {
       into the archive.
     </p>
 
-    <div class="modal-field">
-      <label for="repoUrl">GitHub URL</label>
-      <input id="repoUrl" type="url" placeholder="https://github.com/org/repo" autocomplete="off" spellcheck="false">
-    </div>
+    <div id="urlSection">
+      <div class="modal-field">
+        <label for="repoUrl">GitHub URL</label>
+        <input id="repoUrl" type="url" placeholder="https://github.com/org/repo" autocomplete="off" spellcheck="false">
+      </div>
 
-    <div class="modal-actions">
-      <button type="button" class="btn" id="analyzeBtn">Analyze repository</button>
-      <span class="hint">No login required · Uses the public GitHub API</span>
+      <div class="modal-actions">
+        <button type="button" class="btn" id="analyzeBtn">Analyze repository</button>
+        <span class="hint">No login required · Uses the public GitHub API</span>
+      </div>
     </div>
 
     <div class="preview" id="preview"></div>
@@ -1210,6 +1257,42 @@ footer .colophon {
     card.className = 'card';
     card.dataset.center = d.centers[0];
 
+    // Kebab menu (top-right)
+    const menuBtn = document.createElement('button');
+    menuBtn.type = 'button';
+    menuBtn.className = 'card-menu';
+    menuBtn.setAttribute('aria-label', `Menu for ${d.name}`);
+    menuBtn.setAttribute('aria-haspopup', 'true');
+    menuBtn.setAttribute('aria-expanded', 'false');
+    menuBtn.textContent = '⋯';
+
+    const popover = document.createElement('div');
+    popover.className = 'card-menu-popover';
+    popover.setAttribute('role', 'menu');
+    const correctBtn = document.createElement('button');
+    correctBtn.type = 'button';
+    correctBtn.setAttribute('role', 'menuitem');
+    correctBtn.textContent = '✎ Submit correction / issue';
+    correctBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeAllPopovers();
+      window.openCorrection(d);
+    });
+    popover.appendChild(correctBtn);
+
+    menuBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const wasOpen = popover.classList.contains('open');
+      closeAllPopovers();
+      if (!wasOpen) {
+        popover.classList.add('open');
+        menuBtn.setAttribute('aria-expanded', 'true');
+      }
+    });
+
+    card.appendChild(menuBtn);
+    card.appendChild(popover);
+
     const head = document.createElement('div');
     head.className = 'card-head';
     head.innerHTML = `<span class="card-num">№ ${pad(i + 1)}</span>`;
@@ -1288,6 +1371,16 @@ footer .colophon {
       '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
     }[c]));
   }
+
+  function closeAllPopovers() {
+    document.querySelectorAll('.card-menu-popover.open').forEach(p => {
+      p.classList.remove('open');
+      const btn = p.previousElementSibling;
+      if (btn && btn.classList.contains('card-menu')) btn.setAttribute('aria-expanded', 'false');
+    });
+  }
+  document.addEventListener('click', closeAllPopovers);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPopovers(); });
 
   function render() {
     syncChips('topicFilters',  'topics');
@@ -1406,20 +1499,66 @@ footer .colophon {
   const preview = $('#preview');
 
   let lastResult = null;
+  let mode = 'submission'; // 'submission' | 'correction'
 
-  function open() {
+  const urlSection = $('#urlSection');
+  const modalTitle = $('#modalTitle');
+  const modalIntro = $('#modalIntro');
+
+  function setMode(m, entryName) {
+    mode = m;
+    if (m === 'submission') {
+      modalTitle.innerHTML = `Request <em>software</em> addition`;
+      modalIntro.textContent = `Paste a GitHub URL. We'll fetch the repository's README, license, and metadata, look for explicit acknowledgments of the five NQI centers (C2QA, Q-NEXT, QSA, QSC, SQMS) and known DOE contract numbers, then preview a structured entry. Confirm to open a pre-filled GitHub issue — a maintainer reviews and merges it into the archive.`;
+      urlSection.style.display = '';
+    } else {
+      modalTitle.innerHTML = `Submit <em>correction</em>`;
+      modalIntro.innerHTML = `Editing <strong>${escapeHtml(entryName)}</strong>. Edit any field, add a reason for the change, and submit to open a pre-filled GitHub issue — a maintainer reviews each correction before merging.`;
+      urlSection.style.display = 'none';
+    }
+  }
+
+  function openAddition() {
+    setMode('submission');
     modal.classList.add('open');
     setTimeout(() => urlInput.focus(), 30);
   }
+  // expose for the card kebab menu
+  window.openCorrection = function (entry) {
+    setMode('correction', entry.name);
+    modal.classList.add('open');
+    // synthesise a "result" object so renderPreview can re-use its form
+    const synth = {
+      owner: (entry.url.split('/')[3] || ''),
+      name: entry.name,
+      url: entry.url,
+      description: entry.description || '',
+      license: entry.license || '',
+      language: '',
+      stars: '—',
+      updated: '',
+      topics: [],
+      readmeLength: 0,
+      centers: entry.centers || [],
+      grants: entry.grant ? [entry.grant] : [],
+      inferredType: entry.type,
+      inferredTopics: entry.topics || [],
+      ackSnippet: '',
+      _existingId: entry.id,
+    };
+    renderPreview(synth);
+  };
   function close() {
     modal.classList.remove('open');
     preview.classList.remove('shown');
     preview.innerHTML = '';
     urlInput.value = '';
     lastResult = null;
+    mode = 'submission';
+    setMode('submission');
   }
 
-  openBtn.addEventListener('click', open);
+  openBtn.addEventListener('click', openAddition);
   closeBtn.addEventListener('click', close);
   modal.addEventListener('click', e => { if (e.target === modal) close(); });
   window.addEventListener('keydown', e => {
@@ -1524,7 +1663,9 @@ footer .colophon {
   function renderPreview(r) {
     lastResult = r;
 
-    // Initialise editable state from the detected values.
+    const isCorrection = mode === 'correction';
+
+    // Initialise editable state from the detected (or existing) values.
     edits = {
       description: r.description || '',
       license: r.license || '',
@@ -1534,13 +1675,14 @@ footer .colophon {
       status: r.centers.length ? 'active' : 'pending',
       topics: (r.inferredTopics || []).join(', '),
       ack: r.ackSnippet || '',
+      reason: '',
     };
 
     preview.classList.add('shown');
     preview.innerHTML = `
       <div class="preview-head">
-        <h3>Detected fields — edit before submitting</h3>
-        <button type="button" class="reset" id="resetEdits">↻ Reset to detected</button>
+        <h3>${isCorrection ? 'Edit fields and submit correction' : 'Detected fields — edit before submitting'}</h3>
+        ${isCorrection ? '' : '<button type="button" class="reset" id="resetEdits">↻ Reset to detected</button>'}
       </div>
 
       ${r.centers.length === 0 ? `
@@ -1607,9 +1749,15 @@ footer .colophon {
         <span class="v row-wide"><textarea name="f-ack" rows="5" placeholder="Paste or edit the acknowledgments / funding excerpt from the README or paper.">${escapeHtml(edits.ack)}</textarea></span>
       </div>
 
+      ${isCorrection ? `
+      <div class="row">
+        <span class="k">Reason for change</span>
+        <span class="v row-wide"><textarea name="f-reason" rows="3" placeholder="What's wrong / what should change? (e.g., 'Center should be SQMS not QSC — paper acknowledges DE-AC02-07CH11359')">${escapeHtml(edits.reason)}</textarea></span>
+      </div>` : ''}
+
       <div class="preview-submit">
-        <button type="button" class="btn" id="finalSubmit">Open pre-filled issue ↗</button>
-        <span class="hint">A maintainer reviews each request before it's merged into the archive.</span>
+        <button type="button" class="btn" id="finalSubmit">${isCorrection ? 'Submit correction ↗' : 'Open pre-filled issue ↗'}</button>
+        <span class="hint">A maintainer reviews each ${isCorrection ? 'correction' : 'request'} before it's merged.</span>
       </div>
     `;
 
@@ -1629,7 +1777,10 @@ footer .colophon {
         btn.setAttribute('aria-pressed', edits.centers.has(c) ? 'true' : 'false');
       });
     });
-    preview.querySelector('#resetEdits').addEventListener('click', () => renderPreview(r));
+    const resetBtn = preview.querySelector('#resetEdits');
+    if (resetBtn) resetBtn.addEventListener('click', () => renderPreview(r));
+    const reasonField = preview.querySelector('[name=f-reason]');
+    if (reasonField) reasonField.addEventListener('input', e => edits.reason = e.target.value);
     preview.querySelector('#finalSubmit').addEventListener('click', () => { openIssue(); close(); });
   }
 
@@ -1678,6 +1829,7 @@ footer .colophon {
   function openIssue() {
     if (!lastResult || !edits) return;
     const r = lastResult;
+    const isCorrection = mode === 'correction';
     const centersArr = Array.from(edits.centers);
     const topicsArr = edits.topics
       .split(',').map(s => s.trim()).filter(Boolean);
@@ -1686,8 +1838,11 @@ footer .colophon {
       ? `\n> ${edits.ack.replace(/\n/g, '\n> ').slice(0, 1500)}\n`
       : '\n_No acknowledgments excerpt provided._\n';
 
+    const entryId = r._existingId
+      || r.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+
     const entry = {
-      id: r.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+      id: entryId,
       name: r.name,
       tagline: edits.description.slice(0, 80) || "",
       description: edits.description,
@@ -1701,40 +1856,71 @@ footer .colophon {
       grant: edits.grant || undefined,
       topics: topicsArr.length ? topicsArr : undefined,
     };
-    // Strip undefined keys for cleaner JSON
     Object.keys(entry).forEach(k => entry[k] === undefined && delete entry[k]);
 
-    const detectedSummary = [
-      `_Detected by auto-analysis:_ centers=${r.centers.join(',')||'none'}, grants=${r.grants.join(',')||'none'}, type=${r.inferredType}`,
-      `_Submitter-edited:_ centers=${centersArr.join(',')||'none'}, status=${edits.status}, type=${edits.type}`,
-    ].join('\n');
+    let body, title, label;
 
-    const body = [
-      `**Repository:** ${r.url}`,
-      `**Description:** ${edits.description || '—'}`,
-      `**License:** ${edits.license || '—'}`,
-      `**Language:** ${r.language || '—'}`,
-      `**Type:** ${edits.type}`,
-      `**NQI centers:** ${centersArr.length ? centersArr.join(', ') : '_none — needs maintainer review_'}`,
-      `**DOE grant:** ${edits.grant || '_none_'}`,
-      `**Status:** ${edits.status}`,
-      `**Topics:** ${topicsArr.join(', ') || '—'}`,
-      ``,
-      `### Acknowledgments excerpt`,
-      ackBlock,
-      `### Proposed JSON entry`,
-      '```json',
-      JSON.stringify(entry, null, 2),
-      '```',
-      ``,
-      detectedSummary,
-      ``,
-      `<!-- Submitted via the NQI Software archive submission form -->`,
-    ].join('\n');
+    if (isCorrection) {
+      label = 'correction-request';
+      title = `Update: ${r.name}`;
+      body = [
+        `**Entry ID:** \`${entryId}\``,
+        `**Repository:** ${r.url}`,
+        ``,
+        `### Reason for change`,
+        edits.reason ? `> ${edits.reason.replace(/\n/g, '\n> ')}` : '_(no reason provided)_',
+        ``,
+        `### Submitted values`,
+        `- **Description:** ${edits.description || '—'}`,
+        `- **License:** ${edits.license || '—'}`,
+        `- **Type:** ${edits.type}`,
+        `- **NQI centers:** ${centersArr.length ? centersArr.join(', ') : '_none_'}`,
+        `- **DOE grant:** ${edits.grant || '_none_'}`,
+        `- **Status:** ${edits.status}`,
+        `- **Topics:** ${topicsArr.join(', ') || '—'}`,
+        ``,
+        `### Acknowledgments excerpt`,
+        ackBlock,
+        `### Updated JSON entry (drop-in replacement)`,
+        '```json',
+        JSON.stringify(entry, null, 2),
+        '```',
+        ``,
+        `<!-- Submitted via the NQI Software archive correction form -->`,
+      ].join('\n');
+    } else {
+      label = 'software-request';
+      title = `Add: ${r.name}` + (centersArr.length ? ` (${centersArr.join(', ')})` : ` — review needed`);
+      const detectedSummary = [
+        `_Detected by auto-analysis:_ centers=${r.centers.join(',')||'none'}, grants=${r.grants.join(',')||'none'}, type=${r.inferredType}`,
+        `_Submitter-edited:_ centers=${centersArr.join(',')||'none'}, status=${edits.status}, type=${edits.type}`,
+      ].join('\n');
+      body = [
+        `**Repository:** ${r.url}`,
+        `**Description:** ${edits.description || '—'}`,
+        `**License:** ${edits.license || '—'}`,
+        `**Language:** ${r.language || '—'}`,
+        `**Type:** ${edits.type}`,
+        `**NQI centers:** ${centersArr.length ? centersArr.join(', ') : '_none — needs maintainer review_'}`,
+        `**DOE grant:** ${edits.grant || '_none_'}`,
+        `**Status:** ${edits.status}`,
+        `**Topics:** ${topicsArr.join(', ') || '—'}`,
+        ``,
+        `### Acknowledgments excerpt`,
+        ackBlock,
+        `### Proposed JSON entry`,
+        '```json',
+        JSON.stringify(entry, null, 2),
+        '```',
+        ``,
+        detectedSummary,
+        ``,
+        `<!-- Submitted via the NQI Software archive submission form -->`,
+      ].join('\n');
+    }
 
-    const title = `Add: ${r.name}` + (centersArr.length ? ` (${centersArr.join(', ')})` : ` — review needed`);
     const url = `https://github.com/${REPO}/issues/new?` +
-      `labels=software-request&` +
+      `labels=${label}&` +
       `title=${encodeURIComponent(title)}&` +
       `body=${encodeURIComponent(body)}`;
     window.open(url, '_blank', 'noopener');
