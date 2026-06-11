@@ -53,6 +53,16 @@ Toolkit for fault-tolerant quantum circuit transpilation and T-count optimizatio
 - **License:** MIT
 - **Status:** active
 
+### [qasmtrans](https://github.com/pnnl/qasmtrans)
+
+A C++ based quantum transpiler for NISQ devices.
+
+- **Type:** compiler
+- **Primary institution(s):** Pacific Northwest National Laboratory
+- **Acknowledgment:** "Quantum Science Center (QSC)" (README acknowledgments); also C2QA (DE-SC0012704)
+- **License:** NOASSERTION
+- **Status:** active
+
 ## Likely QSC-relevant (pending acknowledgment verification)
 
 The following ORNL-QCI projects are strong candidates — listed here for now until each one's paper or README is confirmed to acknowledge QSC specifically.
