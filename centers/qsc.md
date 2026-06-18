@@ -63,6 +63,17 @@ A C++ based quantum transpiler for NISQ devices.
 - **License:** NOASSERTION
 - **Status:** active
 
+### [STABSim](https://github.com/seangarn32/STABSim)
+
+GPU-accelerated quantum stabilizer simulator for quantum error correction, with CUDA and MPI support.
+
+- **Type:** simulator
+- **Primary institution(s):** Pacific Northwest National Laboratory
+- **Acknowledgment:** "M. Wang and A. Li were supported by the U.S. Department of Energy, Office of Science, National Quantum Information Science Research Centers, Quantum Science Center (QSC)." (arXiv:2507.03092)
+- **Paper:** [arXiv:2507.03092](https://arxiv.org/abs/2507.03092)
+- **License:** see repo
+- **Status:** pending
+
 ## Likely QSC-relevant (pending acknowledgment verification)
 
 The following ORNL-QCI projects are strong candidates — listed here for now until each one's paper or README is confirmed to acknowledge QSC specifically.
