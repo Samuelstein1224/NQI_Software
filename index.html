@@ -3,1011 +3,51 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>NQI · Software Archive</title>
-<meta name="description" content="An archive of open-source software produced by the five U.S. National Quantum Initiative Research Centers — C2QA, Q-NEXT, QSA, QSC, and SQMS.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..900,0..100&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>NQI Software Archive</title>
 <style>
-:root {
-  --paper: #f3ede1;
-  --paper-2: #faf5e9;
-  --paper-3: #ece4d2;
-  --ink: #1c1714;
-  --ink-2: #4a3f35;
-  --ink-3: #877a68;
-  --rule: #cdc2ab;
-  --rule-soft: #ddd2bb;
-  --accent: #8a2c2c;
-  --accent-soft: #b7593f;
-  --stamp: #6c1f1f;
-
-  --c-c2qa:   #003b6f;
-  --c-qnext:  #047a83;
-  --c-qsa:    #b8801c;
-  --c-qsc:    #4a6a2b;
-  --c-sqms:   #722c4a;
-
-  --f-display: "Fraunces", "Iowan Old Style", "Apple Garamond", Georgia, serif;
-  --f-body:    "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
-  --f-mono:    "IBM Plex Mono", "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
-}
-
-* { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; }
-
-body {
-  background: var(--paper);
-  color: var(--ink);
-  font-family: var(--f-body);
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 1.55;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-
-  background-image:
-    radial-gradient(circle at 15% 8%, rgba(138,44,44,0.04) 0, transparent 35%),
-    radial-gradient(circle at 88% 92%, rgba(4,122,131,0.05) 0, transparent 40%),
-    repeating-linear-gradient(45deg, transparent, transparent 80px, rgba(28,23,20,0.012) 80px, rgba(28,23,20,0.012) 81px);
-}
-
-::selection { background: var(--ink); color: var(--paper); }
-
-a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--rule); transition: border-color .15s, color .15s; }
-a:hover { color: var(--accent); border-color: var(--accent); }
-
-.wrap { max-width: 1240px; margin: 0 auto; padding: 0 32px; }
-
-/* ─── Masthead ──────────────────────────────────────────── */
-
-.masthead {
-  border-bottom: 2px solid var(--ink);
-  padding: 32px 0 24px;
-  margin-top: 24px;
-}
-.masthead-top {
-  display: flex; justify-content: space-between; align-items: baseline;
-  font-family: var(--f-mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink-2);
-  padding-bottom: 24px;
-}
-.masthead-cta {
-  font-family: var(--f-mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  background: transparent;
-  color: var(--ink);
-  border: 1px solid var(--ink);
-  padding: 6px 12px;
-  cursor: pointer;
-  transition: background .14s, color .14s;
-}
-.masthead-cta:hover { background: var(--ink); color: var(--paper); }
-.title {
-  font-family: var(--f-display);
-  font-variation-settings: "opsz" 144, "SOFT" 30;
-  font-weight: 400;
-  font-size: clamp(56px, 8vw, 112px);
-  line-height: 0.92;
-  letter-spacing: -0.025em;
-  margin: 0;
-  display: flex;
-  align-items: baseline;
-  gap: 0.3em;
-}
-.title em {
-  font-style: italic;
-  font-variation-settings: "opsz" 144, "SOFT" 100;
-  color: var(--accent);
-}
-.dek {
-  margin: 28px 0 0;
-  max-width: 720px;
-  font-family: var(--f-display);
-  font-variation-settings: "opsz" 14, "SOFT" 50;
-  font-size: 19px;
-  font-weight: 350;
-  line-height: 1.5;
-  color: var(--ink-2);
-}
-.dek strong { color: var(--ink); font-weight: 500; }
-
-/* ─── Stats strip ──────────────────────────────────────── */
-
-.stats {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  border-bottom: 1px solid var(--rule);
-  padding: 18px 0;
-  gap: 4px;
-}
-.stat {
-  display: flex; flex-direction: column;
-  padding: 6px 14px 6px 0;
-  border-right: 1px dashed var(--rule);
-}
-.stat:last-child { border-right: none; }
-.stat .n {
-  font-family: var(--f-display);
-  font-variation-settings: "opsz" 60, "SOFT" 20;
-  font-size: 30px; line-height: 1;
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
-}
-.stat .l {
-  font-family: var(--f-mono);
-  font-size: 10px;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-  margin-top: 6px;
-}
-.stat[data-center] .n { color: var(--stat-color, var(--ink)); }
-.stat[data-center="C2QA"]   { --stat-color: var(--c-c2qa); }
-.stat[data-center="Q-NEXT"] { --stat-color: var(--c-qnext); }
-.stat[data-center="QSA"]    { --stat-color: var(--c-qsa); }
-.stat[data-center="QSC"]    { --stat-color: var(--c-qsc); }
-.stat[data-center="SQMS"]   { --stat-color: var(--c-sqms); }
-
-/* ─── Controls ─────────────────────────────────────────── */
-
-.controls {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 28px;
-  padding: 28px 0 20px;
-  align-items: center;
-  border-bottom: 1px solid var(--rule);
-}
-.search {
-  position: relative;
-  display: flex; align-items: center;
-  border-bottom: 1.5px solid var(--ink);
-  padding-bottom: 10px;
-}
-.search::before {
-  content: "⌕"; /* U+2315 */
-  font-family: var(--f-display);
-  font-size: 24px;
-  color: var(--ink-2);
-  margin-right: 14px;
-  line-height: 1;
-}
-.search input {
-  flex: 1; border: none; background: transparent; outline: none;
-  font-family: var(--f-display);
-  font-variation-settings: "opsz" 60, "SOFT" 40;
-  font-size: 24px;
-  font-weight: 400;
-  color: var(--ink);
-  padding: 4px 0;
-}
-.search input::placeholder { color: var(--ink-3); font-style: italic; }
-.search .count {
-  font-family: var(--f-mono);
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  color: var(--ink-3);
-  font-variant-numeric: tabular-nums;
-}
-.sortby {
-  font-family: var(--f-mono);
-  font-size: 11px;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-  display: flex; align-items: center; gap: 10px;
-}
-.sortby select {
-  font-family: var(--f-mono);
-  font-size: 11px;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  border: 1px solid var(--rule);
-  background: var(--paper-2);
-  color: var(--ink);
-  padding: 6px 10px;
-  border-radius: 0;
-  cursor: pointer;
-}
-
-.filter-row {
-  display: flex; flex-wrap: wrap; align-items: center;
-  gap: 8px 12px;
-  padding: 14px 0;
-  border-bottom: 1px solid var(--rule);
-}
-.filter-row + .filter-row { border-bottom: none; }
-.filter-label {
-  font-family: var(--f-mono);
-  font-size: 10px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-  width: 78px;
-  flex-shrink: 0;
-}
-.chip {
-  font-family: var(--f-mono);
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 5px 10px;
-  border: 1px solid var(--rule);
-  background: transparent;
-  color: var(--ink-2);
-  cursor: pointer;
-  transition: all .12s ease;
-  border-radius: 0;
-  display: inline-flex; align-items: center; gap: 6px;
-}
-.chip:hover { border-color: var(--ink); color: var(--ink); }
-.chip.active {
-  background: var(--ink);
-  color: var(--paper);
-  border-color: var(--ink);
-}
-.chip .dot {
-  width: 7px; height: 7px; display: inline-block;
-  border-radius: 50%;
-  background: var(--chip-color, var(--ink-3));
-}
-.chip[data-center="C2QA"]   { --chip-color: var(--c-c2qa); }
-.chip[data-center="Q-NEXT"] { --chip-color: var(--c-qnext); }
-.chip[data-center="QSA"]    { --chip-color: var(--c-qsa); }
-.chip[data-center="QSC"]    { --chip-color: var(--c-qsc); }
-.chip[data-center="SQMS"]   { --chip-color: var(--c-sqms); }
-.chip.active .dot { background: var(--paper); }
-
-/* ─── Card grid ────────────────────────────────────────── */
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
-  gap: 0;
-  border-left: 1px solid var(--rule);
-  border-top: 1px solid var(--rule);
-  margin: 32px 0 64px;
-}
-.card {
-  position: relative;
-  padding: 26px 28px 24px;
-  border-right: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
-  background: var(--paper-2);
-  display: flex; flex-direction: column;
-  min-height: 260px;
-  transition: background .18s ease, transform .18s ease;
-  animation: fadeIn .6s ease both;
-}
-.card:hover { background: var(--paper); transform: translateY(-1px); }
-.card::before {
-  content: "";
-  position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
-  background: var(--card-color, var(--ink));
-  opacity: 0.7;
-}
-.card[data-center="C2QA"]   { --card-color: var(--c-c2qa); }
-.card[data-center="Q-NEXT"] { --card-color: var(--c-qnext); }
-.card[data-center="QSA"]    { --card-color: var(--c-qsa); }
-.card[data-center="QSC"]    { --card-color: var(--c-qsc); }
-.card[data-center="SQMS"]   { --card-color: var(--c-sqms); }
-
-.card-head {
-  display: flex; justify-content: space-between; align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 10px;
-  padding-right: 22px;       /* room for the kebab menu */
-}
-
-.card-menu {
-  position: absolute;
-  top: 16px; right: 12px;
-  background: transparent; border: none;
-  cursor: pointer;
-  color: var(--ink-3);
-  font-size: 18px;
-  line-height: 1;
-  padding: 4px 6px;
-  border-radius: 2px;
-  letter-spacing: 0.1em;
-  transition: color .12s, background .12s;
-}
-.card-menu:hover { color: var(--ink); background: var(--paper-3); }
-.card-menu:focus-visible { outline: 1px solid var(--ink); outline-offset: 2px; }
-
-.card-menu-popover {
-  position: absolute;
-  top: 40px; right: 12px;
-  background: var(--paper-2);
-  border: 1px solid var(--ink);
-  box-shadow: 0 10px 26px -8px rgba(28,23,20,0.35);
-  z-index: 3;
-  min-width: 220px;
-  padding: 4px 0;
-  display: none;
-}
-.card-menu-popover.open { display: block; animation: fadeIn .14s ease both; }
-.card-menu-popover button {
-  display: block;
-  width: 100%;
-  text-align: left;
-  background: transparent;
-  border: none;
-  font-family: var(--f-mono);
-  font-size: 10.5px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ink-2);
-  padding: 9px 14px;
-  cursor: pointer;
-}
-.card-menu-popover button:hover { background: var(--ink); color: var(--paper); }
-.card-num {
-  font-family: var(--f-mono);
-  font-size: 10px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-  font-variant-numeric: tabular-nums;
-}
-.card-centers { display: flex; gap: 5px; flex-wrap: wrap; justify-content: flex-end; }
-.card-pill {
-  font-family: var(--f-mono);
-  font-size: 9.5px;
-  letter-spacing: 0.12em;
-  font-weight: 500;
-  padding: 3px 7px;
-  background: var(--pill-bg, var(--ink));
-  color: var(--paper);
-  text-transform: uppercase;
-}
-.card-pill[data-center="C2QA"]   { --pill-bg: var(--c-c2qa); }
-.card-pill[data-center="Q-NEXT"] { --pill-bg: var(--c-qnext); }
-.card-pill[data-center="QSA"]    { --pill-bg: var(--c-qsa); color: #1c1714; }
-.card-pill[data-center="QSC"]    { --pill-bg: var(--c-qsc); }
-.card-pill[data-center="SQMS"]   { --pill-bg: var(--c-sqms); }
-
-.card h3 {
-  font-family: var(--f-display);
-  font-variation-settings: "opsz" 36, "SOFT" 30;
-  font-size: 28px;
-  line-height: 1.05;
-  font-weight: 500;
-  margin: 4px 0 6px;
-  letter-spacing: -0.01em;
-}
-.card h3 a { border-bottom: none; }
-.card h3 a:hover { color: var(--accent); }
-.card .tagline {
-  font-family: var(--f-display);
-  font-variation-settings: "opsz" 14, "SOFT" 90;
-  font-style: italic;
-  font-size: 14px;
-  color: var(--ink-2);
-  margin: 0 0 14px;
-  line-height: 1.35;
-}
-.card .desc {
-  font-size: 14px;
-  line-height: 1.5;
-  color: var(--ink-2);
-  margin: 0 0 18px;
-  flex: 1;
-}
-.card-meta {
-  display: flex; flex-wrap: wrap; gap: 6px 10px;
-  margin-bottom: 12px;
-}
-.tag {
-  font-family: var(--f-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ink-2);
-  padding: 2px 0;
-}
-.tag.tag-type { color: var(--ink); font-weight: 500; }
-.tag.tag-status-pending { color: var(--accent-soft); }
-.tag.tag-status-pending::before { content: "◌ "; }
-.tag.tag-status-active::before  { content: "● "; color: var(--c-qsc); }
-
-.card-topics {
-  display: flex; flex-wrap: wrap; gap: 4px;
-  margin: 2px 0 14px;
-}
-.topic {
-  font-family: var(--f-display);
-  font-variation-settings: "opsz" 14, "SOFT" 60;
-  font-style: italic;
-  font-size: 12px;
-  background: var(--paper-3);
-  color: var(--ink-2);
-  border: none;
-  padding: 2px 8px;
-  cursor: pointer;
-  transition: background .12s, color .12s;
-  border-radius: 1px;
-}
-.topic:hover { background: var(--ink); color: var(--paper); font-style: italic; }
-
-.card-footer {
-  border-top: 1px dashed var(--rule);
-  padding-top: 10px;
-  display: flex; flex-direction: column; gap: 3px;
-  font-family: var(--f-mono);
-  font-size: 10.5px;
-  color: var(--ink-3);
-  letter-spacing: 0.02em;
-}
-.card-footer a { color: var(--ink-2); border-bottom-color: var(--rule-soft); }
-.card-footer .grant { color: var(--ink-3); font-variant-numeric: tabular-nums; }
-
-/* ─── Empty state ──────────────────────────────────────── */
-
-.empty {
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: 60px 20px;
-  color: var(--ink-3);
-  font-family: var(--f-display);
-  font-style: italic;
-  font-size: 22px;
-}
-
-/* ─── Footer ───────────────────────────────────────────── */
-
-footer {
-  border-top: 2px solid var(--ink);
-  padding: 36px 0 48px;
-  margin-top: 64px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 32px;
-}
-footer .col h4 {
-  font-family: var(--f-mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  font-weight: 500;
-  margin: 0 0 12px;
-  color: var(--ink-3);
-}
-footer .col p, footer .col li {
-  font-size: 13.5px;
-  line-height: 1.55;
-  color: var(--ink-2);
-  margin: 0 0 6px;
-}
-footer ul { list-style: none; padding: 0; margin: 0; }
-footer .colophon {
-  margin-top: 28px;
-  grid-column: 1 / -1;
-  border-top: 1px dashed var(--rule);
-  padding-top: 18px;
-  font-family: var(--f-mono);
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
-}
-
-/* ─── Motion ───────────────────────────────────────────── */
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.card:nth-child(1)  { animation-delay: 0ms;  }
-.card:nth-child(2)  { animation-delay: 40ms; }
-.card:nth-child(3)  { animation-delay: 80ms; }
-.card:nth-child(4)  { animation-delay: 120ms;}
-.card:nth-child(5)  { animation-delay: 160ms;}
-.card:nth-child(6)  { animation-delay: 200ms;}
-.card:nth-child(7)  { animation-delay: 240ms;}
-.card:nth-child(8)  { animation-delay: 280ms;}
-.card:nth-child(9)  { animation-delay: 320ms;}
-.card:nth-child(10) { animation-delay: 360ms;}
-.card:nth-child(n+11) { animation-delay: 400ms; }
-
-@media (prefers-reduced-motion: reduce) {
-  .card { animation: none; }
-}
-
-/* ─── Submission modal ─────────────────────────────────── */
-
-.modal-backdrop {
-  position: fixed; inset: 0;
-  background: rgba(28,23,20,0.55);
-  backdrop-filter: blur(2px);
-  display: none;
-  align-items: flex-start;
-  justify-content: center;
-  z-index: 50;
-  padding: 64px 20px 20px;
-  overflow-y: auto;
-  animation: fadeBackdrop .18s ease both;
-}
-.modal-backdrop.open { display: flex; }
-@keyframes fadeBackdrop { from { opacity: 0; } to { opacity: 1; } }
-
-.modal {
-  background: var(--paper);
-  width: 100%;
-  max-width: 680px;
-  border: 1px solid var(--ink);
-  border-top: 6px solid var(--accent);
-  padding: 36px 40px 32px;
-  box-shadow: 0 30px 60px -20px rgba(28,23,20,0.45);
-  animation: modalIn .25s cubic-bezier(.2,.7,.3,1) both;
-  max-height: calc(100vh - 96px);
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--rule) transparent;
-}
-.modal::-webkit-scrollbar { width: 8px; }
-.modal::-webkit-scrollbar-thumb { background: var(--rule); }
-@keyframes modalIn {
-  from { opacity: 0; transform: translateY(10px) scale(0.99); }
-  to   { opacity: 1; transform: none; }
-}
-.modal-head {
-  display: flex; justify-content: space-between; align-items: baseline;
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--rule);
-  margin-bottom: 22px;
-}
-.modal-head h2 {
-  font-family: var(--f-display);
-  font-variation-settings: "opsz" 60, "SOFT" 30;
-  font-weight: 500;
-  font-size: 30px;
-  margin: 0;
-  letter-spacing: -0.015em;
-}
-.modal-head h2 em {
-  font-style: italic;
-  font-variation-settings: "opsz" 60, "SOFT" 90;
-  color: var(--accent);
-}
-.modal-close {
-  background: transparent; border: none; cursor: pointer;
-  font-family: var(--f-mono); font-size: 11px;
-  letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--ink-3);
-}
-.modal-close:hover { color: var(--ink); }
-
-.modal-intro {
-  font-family: var(--f-display);
-  font-variation-settings: "opsz" 14, "SOFT" 60;
-  font-size: 15px;
-  font-weight: 350;
-  color: var(--ink-2);
-  margin: 0 0 22px;
-  line-height: 1.5;
-}
-
-.modal-field { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
-.modal-field label {
-  font-family: var(--f-mono);
-  font-size: 10px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-}
-.modal-field input {
-  font-family: var(--f-mono);
-  font-size: 14px;
-  background: var(--paper-2);
-  border: 1px solid var(--rule);
-  border-radius: 0;
-  padding: 12px 14px;
-  color: var(--ink);
-  outline: none;
-  transition: border-color .14s;
-}
-.modal-field input:focus { border-color: var(--ink); }
-
-.modal-actions {
-  display: flex; gap: 10px; align-items: center;
-  margin-top: 6px;
-}
-.btn {
-  font-family: var(--f-mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  padding: 10px 18px;
-  border: 1px solid var(--ink);
-  background: var(--ink);
-  color: var(--paper);
-  cursor: pointer;
-  transition: background .14s, color .14s;
-}
-.btn:hover { background: var(--accent); border-color: var(--accent); }
-.btn:disabled { opacity: 0.45; cursor: not-allowed; }
-.btn-secondary {
-  background: transparent;
-  color: var(--ink);
-}
-.btn-secondary:hover { background: var(--ink); color: var(--paper); }
-.modal-actions .hint {
-  font-family: var(--f-mono);
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  color: var(--ink-3);
-}
-
-.preview {
-  margin-top: 26px;
-  padding-top: 20px;
-  border-top: 1px dashed var(--rule);
-  display: none;
-}
-.preview.shown { display: block; animation: fadeIn .25s ease both; }
-.preview h3 {
-  font-family: var(--f-mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  font-weight: 500;
-  color: var(--ink-3);
-  margin: 0 0 12px;
-}
-.preview .row {
-  display: grid;
-  grid-template-columns: 120px 1fr;
-  gap: 4px 16px;
-  padding: 6px 0;
-  border-bottom: 1px dotted var(--rule-soft);
-  font-size: 13.5px;
-  align-items: baseline;
-}
-.preview .row:last-child { border-bottom: none; }
-.preview .k {
-  font-family: var(--f-mono);
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-}
-.preview .v { color: var(--ink); }
-.preview .v em { color: var(--ink-3); font-style: italic; }
-.preview .pill {
-  display: inline-block;
-  font-family: var(--f-mono);
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  padding: 2px 7px;
-  margin-right: 6px;
-  background: var(--ink);
-  color: var(--paper);
-  text-transform: uppercase;
-}
-.preview .pill[data-center="C2QA"]   { background: var(--c-c2qa); }
-.preview .pill[data-center="Q-NEXT"] { background: var(--c-qnext); }
-.preview .pill[data-center="QSA"]    { background: var(--c-qsa); color: #1c1714; }
-.preview .pill[data-center="QSC"]    { background: var(--c-qsc); }
-.preview .pill[data-center="SQMS"]   { background: var(--c-sqms); }
-.preview .quote {
-  font-family: var(--f-display);
-  font-style: italic;
-  font-variation-settings: "opsz" 14, "SOFT" 80;
-  font-size: 13px;
-  color: var(--ink-2);
-  background: var(--paper-3);
-  padding: 10px 14px;
-  border-left: 2px solid var(--accent-soft);
-  margin: 8px 0;
-  line-height: 1.45;
-}
-
-/* Editable preview controls */
-.preview-head {
-  display: flex; align-items: baseline; justify-content: space-between;
-  margin-bottom: 12px;
-}
-.preview-head h3 { margin: 0; }
-.preview-head .reset {
-  font-family: var(--f-mono); font-size: 10px;
-  letter-spacing: 0.14em; text-transform: uppercase;
-  background: none; border: none; cursor: pointer;
-  color: var(--accent); padding: 0;
-}
-.preview-head .reset:hover { text-decoration: underline; }
-
-.preview .v input[type=text],
-.preview .v input[type=url],
-.preview .v textarea,
-.preview .v select {
-  width: 100%;
-  font-family: var(--f-mono);
-  font-size: 12px;
-  background: var(--paper-2);
-  border: 1px solid var(--rule);
-  color: var(--ink);
-  padding: 6px 8px;
-  outline: none;
-  border-radius: 0;
-  transition: border-color .14s;
-}
-.preview .v input:focus,
-.preview .v textarea:focus,
-.preview .v select:focus { border-color: var(--ink); }
-.preview .v textarea { resize: vertical; min-height: 56px; line-height: 1.45; }
-.preview .v.row-wide { grid-column: 2 / -1; }
-
-.center-toggle {
-  display: flex; gap: 8px; flex-wrap: wrap;
-}
-
-/* OFF state — clearly looks "unselected". Dashed outline, muted text,
-   a small empty circle indicator on the left so it reads as a toggle. */
-.center-toggle .pill {
-  position: relative;
-  font-family: var(--f-mono);
-  font-size: 10.5px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  border: 1px dashed var(--rule);
-  background: var(--paper);
-  color: var(--ink-3);
-  padding: 6px 12px 6px 28px;
-  cursor: pointer;
-  transition: all .14s ease;
-}
-.center-toggle .pill::before {
-  content: "";
-  position: absolute;
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 11px; height: 11px;
-  border-radius: 50%;
-  border: 1.5px solid var(--ink-3);
-  background: transparent;
-  transition: all .14s ease;
-}
-.center-toggle .pill:hover {
-  color: var(--ink);
-  border-color: var(--ink);
-  border-style: solid;
-}
-.center-toggle .pill:hover::before { border-color: var(--ink); }
-
-/* ON state — solid center color, white text, filled check indicator,
-   no border, soft inset highlight for depth. */
-.center-toggle .pill[aria-pressed="true"] {
-  background: var(--pill-bg);
-  color: #fff;
-  border: 1px solid var(--pill-bg);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.15),
-    0 2px 6px -2px rgba(28,23,20,0.25);
-}
-.center-toggle .pill[aria-pressed="true"]::before {
-  background: #fff;
-  border-color: #fff;
-  content: "✓";
-  color: var(--pill-bg);
-  font-size: 9px;
-  font-weight: 700;
-  text-align: center;
-  line-height: 11px;
-  border-width: 0;
-  width: 12px; height: 12px;
-  padding: 0;
-}
-/* QSA gold needs dark text for contrast */
-.center-toggle .pill[aria-pressed="true"][data-center="QSA"] { color: #1c1714; }
-
-.center-toggle .pill[data-center="C2QA"]   { --pill-bg: var(--c-c2qa); }
-.center-toggle .pill[data-center="Q-NEXT"] { --pill-bg: var(--c-qnext); }
-.center-toggle .pill[data-center="QSA"]    { --pill-bg: var(--c-qsa); }
-.center-toggle .pill[data-center="QSC"]    { --pill-bg: var(--c-qsc); }
-.center-toggle .pill[data-center="SQMS"]   { --pill-bg: var(--c-sqms); }
-
-.status-flag {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-family: var(--f-mono); font-size: 11px;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--ink-2);
-}
-.status-flag input { accent-color: var(--accent); }
-
-.preview-submit {
-  display: flex; align-items: center; gap: 14px;
-  margin-top: 22px;
-  padding-top: 18px;
-  border-top: 1px solid var(--rule);
-}
-
-.callout {
-  background: var(--paper-3);
-  border-left: 3px solid var(--accent-soft);
-  padding: 10px 14px;
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--ink-2);
-  margin: 0 0 16px;
-}
-.callout strong { color: var(--accent); font-weight: 500; }
-.preview-submit .hint {
-  font-family: var(--f-mono);
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  color: var(--ink-3);
-}
-.preview .err {
-  color: var(--accent);
-  font-size: 13.5px;
-  padding: 10px 0;
-}
-.preview .none {
-  color: var(--ink-3);
-  font-style: italic;
-}
-
-.spinner {
-  display: inline-block;
-  width: 11px; height: 11px;
-  border: 1.5px solid var(--ink-3);
-  border-top-color: transparent;
-  border-radius: 50%;
-  animation: spin .7s linear infinite;
-  vertical-align: -2px;
-  margin-right: 6px;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* ─── Responsive ───────────────────────────────────────── */
-
-@media (max-width: 820px) {
-  .wrap { padding: 0 20px; }
-  .stats { grid-template-columns: repeat(3, 1fr); }
-  .stat { border-bottom: 1px dashed var(--rule); padding-bottom: 12px; }
-  .controls { grid-template-columns: 1fr; gap: 16px; }
-  .filter-label { width: 100%; margin-bottom: 4px; }
-  .grid { grid-template-columns: 1fr; }
-  footer { grid-template-columns: 1fr; }
-  .title { font-size: 56px; }
-}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#f7f8fa;color:#1a1a2e;line-height:1.5}
+header{background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;padding:2rem 1.5rem}
+header h1{font-size:1.75rem;margin-bottom:.25rem}
+header p{opacity:.8;font-size:.95rem}
+.controls{display:flex;flex-wrap:wrap;gap:.75rem;padding:1.25rem 1.5rem;background:#fff;border-bottom:1px solid #e2e6ea;position:sticky;top:0;z-index:10}
+input[type=search]{flex:1;min-width:180px;padding:.5rem .75rem;border:1px solid #ced4da;border-radius:6px;font-size:.9rem}
+select{padding:.5rem .75rem;border:1px solid #ced4da;border-radius:6px;font-size:.9rem;background:#fff}
+.badge{display:inline-block;padding:.2em .55em;border-radius:4px;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.25rem;padding:1.5rem}
+.card{background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.07);padding:1.25rem;display:flex;flex-direction:column;gap:.6rem;transition:box-shadow .15s}
+.card:hover{box-shadow:0 4px 16px rgba(0,0,0,.12)}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem}
+.card h2{font-size:1.05rem;font-weight:700}
+.card h2 a{color:#1a1a2e;text-decoration:none}
+.card h2 a:hover{color:#0066cc}
+.tagline{font-size:.85rem;color:#555;font-style:italic}
+.desc{font-size:.88rem;color:#333}
+.meta{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.3rem}
+.center-badge{background:#e8f0fe;color:#1a56db}
+.type-badge{background:#e6f9f0;color:#0a7c42}
+.status-active{background:#d4edda;color:#155724}
+.status-pending{background:#fff3cd;color:#856404}
+.paper-link{font-size:.8rem;margin-top:.2rem}
+.paper-link a{color:#0066cc;text-decoration:none}
+.paper-link a:hover{text-decoration:underline}
+.empty{grid-column:1/-1;text-align:center;padding:3rem;color:#888}
+.stats{padding:.5rem 1.5rem;font-size:.82rem;color:#666;background:#fff;border-bottom:1px solid #e2e6ea}
 </style>
 </head>
 <body>
-
-<div class="wrap">
-
-  <header class="masthead">
-    <div class="masthead-top">
-      <span>National&nbsp;Quantum&nbsp;Initiative · Software&nbsp;Archive</span>
-      <button type="button" class="masthead-cta" id="openSubmit">+ Request&nbsp;software&nbsp;addition</button>
-    </div>
-    <h1 class="title">NQI <em>Software</em></h1>
-    <p class="dek">
-      An open, community-curated archive of software produced by the five U.S.
-      <strong>National Quantum Information Science Research Centers</strong> —
-      C2QA, Q-NEXT, QSA, QSC, and SQMS — established under the
-      National Quantum Initiative Act and renewed November 2025 with
-      <span style="font-family:var(--f-mono); font-size:0.85em;">$625M</span> over five years.
-    </p>
-
-    <div class="stats" id="stats">
-      <div class="stat"><span class="n" data-stat="total">—</span><span class="l">Total entries</span></div>
-      <div class="stat" data-center="C2QA"><span class="n" data-stat="C2QA">—</span><span class="l">C2QA</span></div>
-      <div class="stat" data-center="Q-NEXT"><span class="n" data-stat="Q-NEXT">—</span><span class="l">Q-NEXT</span></div>
-      <div class="stat" data-center="QSA"><span class="n" data-stat="QSA">—</span><span class="l">QSA</span></div>
-      <div class="stat" data-center="QSC"><span class="n" data-stat="QSC">—</span><span class="l">QSC</span></div>
-      <div class="stat" data-center="SQMS"><span class="n" data-stat="SQMS">—</span><span class="l">SQMS</span></div>
-    </div>
-  </header>
-
-  <section class="controls">
-    <div class="search">
-      <input id="q" type="search" placeholder="Search the archive — try ‘surface code’, ‘QICK’, ‘bosonic’…" autocomplete="off">
-      <span class="count" id="resultCount">—</span>
-    </div>
-    <div class="sortby">
-      <span>Order</span>
-      <select id="sort">
-        <option value="name">A → Z</option>
-        <option value="center">By center</option>
-        <option value="type">By type</option>
-        <option value="status">By status</option>
-      </select>
-    </div>
-  </section>
-
-  <section>
-    <div class="filter-row" id="topicFilters">
-      <span class="filter-label">Topic</span>
-    </div>
-    <div class="filter-row" id="centerFilters">
-      <span class="filter-label">Center</span>
-    </div>
-    <div class="filter-row" id="typeFilters">
-      <span class="filter-label">Type</span>
-    </div>
-    <div class="filter-row" id="statusFilters">
-      <span class="filter-label">Status</span>
-    </div>
-  </section>
-
-  <main>
-    <div class="grid" id="grid"></div>
-  </main>
-
-  <footer>
-    <div class="col">
-      <h4>About</h4>
-      <p>
-        Unofficial, community-maintained. Not affiliated with any of the
-        centers, DOE, or any partner institution. Information drawn from
-        public papers, READMEs, and grant acknowledgments.
-      </p>
-      <p>
-        Verified entries cite their NQI funding source directly.
-        Pending entries are under review — see
-        <a href="centers/_pending.md">centers/_pending.md</a>.
-      </p>
-    </div>
-    <div class="col">
-      <h4>Contribute</h4>
-      <ul>
-        <li><a href="https://github.com/Samuelstein1224/NQI_Software">Repository on GitHub</a></li>
-        <li><a href="CONTRIBUTING.md">Contribution guide</a></li>
-        <li><a href="centers/c2qa.md">C2QA</a> · <a href="centers/q-next.md">Q-NEXT</a> · <a href="centers/qsa.md">QSA</a> · <a href="centers/qsc.md">QSC</a> · <a href="centers/sqms.md">SQMS</a></li>
-      </ul>
-    </div>
-    <div class="colophon">
-      <span>Set in Fraunces &amp; IBM Plex.</span>
-      <span>Open archive · CC-BY 4.0 metadata</span>
-      <span id="updatedAt">— · —</span>
-    </div>
-  </footer>
-
+<header>
+<h1>NQI Software Archive</h1>
+<p>Open-source tools from the five U.S. NQI Research Centers — C2QA · Q-NEXT · QSA · QSC · SQMS</p>
+</header>
+<div class="controls">
+<input type="search" id="q" placeholder="Search name, description, topic…" aria-label="Search">
+<select id="fCenter"><option value="">All centers</option><option>C2QA</option><option>Q-NEXT</option><option>QSA</option><option>QSC</option><option>SQMS</option></select>
+<select id="fType"><option value="">All types</option><option>simulator</option><option>benchmark</option><option>control</option><option>compiler</option><option>framework</option><option>library</option><option>dataset</option><option>other</option></select>
+<select id="fStatus"><option value="">All statuses</option><option value="active">Active</option><option value="pending">Pending</option></select>
 </div>
-
-<!-- ─── Submission modal ─────────────────────────────────── -->
-<div class="modal-backdrop" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-  <div class="modal">
-    <div class="modal-head">
-      <h2 id="modalTitle">Request <em>software</em> addition</h2>
-      <button type="button" class="modal-close" id="closeSubmit" aria-label="Close">Esc · Close</button>
-    </div>
-    <p class="modal-intro" id="modalIntro">
-      Paste a GitHub URL. We'll fetch the repository's README, license, and metadata,
-      look for explicit acknowledgments of the five NQI centers (C2QA, Q-NEXT, QSA, QSC,
-      SQMS) and known DOE contract numbers, then preview a structured entry.
-      Confirm to open a pre-filled GitHub issue — a maintainer reviews and merges it
-      into the archive.
-    </p>
-
-    <div id="urlSection">
-      <div class="modal-field">
-        <label for="repoUrl">GitHub URL</label>
-        <input id="repoUrl" type="url" placeholder="https://github.com/org/repo" autocomplete="off" spellcheck="false">
-      </div>
-
-      <div class="modal-actions">
-        <button type="button" class="btn" id="analyzeBtn">Analyze repository</button>
-        <span class="hint">No login required · Uses the public GitHub API</span>
-      </div>
-    </div>
-
-    <div class="preview" id="preview"></div>
-  </div>
-</div>
-
+<div class="stats" id="stats"></div>
+<div class="grid" id="grid"></div>
 <script id="data" type="application/json">
 [
   {
@@ -1018,977 +58,272 @@ footer .colophon {
     "primary_institutions": ["Fermilab", "University of Chicago"],
     "type": "control", "license": "MIT", "status": "active", "verified": true,
     "grant": "DE-AC02-07CH11359",
-    "topics": ["Control & Pulse", "FPGA / Hardware"],
-    "paper": { "title": "The QICK: Readout and control for qubits and detectors", "arxiv": "2110.00557" }
+    "topics": ["Qubit Control", "RFSoC", "Firmware"]
   },
   {
-    "id": "qick-tools", "name": "qick-tools", "tagline": "Task-specific QICK firmware extensions",
-    "description": "Specialised firmware and software extensions for the QICK boards, covering measurement workflows beyond the core QICK distribution.",
+    "id": "qick-tools", "name": "qick-tools", "tagline": "Companion tools for QICK",
+    "description": "Supporting libraries and utilities for the QICK qubit controller ecosystem.",
     "url": "https://github.com/openquantumhardware/qick-tools",
-    "centers": ["SQMS"], "primary_institutions": ["Fermilab"],
+    "centers": ["SQMS"],
+    "primary_institutions": ["Fermilab"],
     "type": "control", "license": "MIT", "status": "active", "verified": true,
     "grant": "DE-AC02-07CH11359",
-    "topics": ["Control & Pulse", "FPGA / Hardware"]
+    "topics": ["Qubit Control", "RFSoC"]
   },
   {
-    "id": "qick-dawg", "name": "QICK-DAWG", "tagline": "Defect AWG for quantum sensing",
-    "description": "QICK-based control framework specialised for solid-state quantum defects (NV centres etc.) used in quantum sensing experiments.",
+    "id": "qick-dawg", "name": "QICK-DAWG", "tagline": "Data Acquisition with QICK",
+    "description": "Data acquisition framework built on top of QICK for quantum sensing and qubit experiments.",
     "url": "https://github.com/sandialabs/qick-dawg",
-    "centers": ["QSA", "SQMS"], "primary_institutions": ["Sandia National Laboratories"],
-    "type": "control", "license": "see repo", "status": "active", "verified": true,
-    "topics": ["Control & Pulse", "Quantum Sensing"],
-    "paper": { "title": "QICK-DAWG: A Quantum Sensing Control Framework", "arxiv": "2311.18253" }
+    "centers": ["QSA", "SQMS"],
+    "primary_institutions": ["Sandia National Laboratories"],
+    "type": "control", "license": "Apache-2.0", "status": "active", "verified": true,
+    "grant": "DE-AC02-05CH11231",
+    "topics": ["Qubit Control", "Data Acquisition", "Quantum Sensing"]
   },
   {
-    "id": "qick-interpreter", "name": "qick_interpreter", "tagline": "Pulse-program interpreter for QICK",
-    "description": "Fermilab-internal interpreter and tooling for compiling and running QICK-targeted pulse programs.",
+    "id": "qick-interpreter", "name": "qick_interpreter", "tagline": "High-level QICK pulse scripting",
+    "description": "Interpreter layer for QICK enabling higher-level pulse-sequence scripting without modifying firmware.",
     "url": "https://github.com/Fermilab-Quantum-Science/qick_interpreter",
-    "centers": ["SQMS"], "primary_institutions": ["Fermilab"],
-    "type": "compiler", "license": "see repo", "status": "active", "verified": true,
-    "topics": ["Control & Pulse", "Compilation"]
+    "centers": ["SQMS"],
+    "primary_institutions": ["Fermilab"],
+    "type": "control", "license": "MIT", "status": "active", "verified": true,
+    "grant": "DE-AC02-07CH11359",
+    "topics": ["Qubit Control", "Pulse Sequences"]
   },
   {
-    "id": "sequence", "name": "SeQUeNCe", "tagline": "Simulator of QUantum NEtwork Communication",
-    "description": "Discrete-event simulator for quantum networks — models photonic components, control protocols, and end-to-end applications across multi-node topologies.",
+    "id": "sequence", "name": "SeQUeNCe", "tagline": "Simulator for Quantum Networks and Channels",
+    "description": "Modular, event-driven quantum-network simulator written in Python. Supports entanglement distribution, repeater protocols, and custom photonic-component models.",
     "url": "https://github.com/sequence-toolbox/SeQUeNCe",
-    "centers": ["Q-NEXT"], "primary_institutions": ["Argonne National Laboratory", "University of Chicago"],
-    "type": "simulator", "license": "BSD-3-Clause", "status": "active", "verified": true,
+    "centers": ["Q-NEXT"],
+    "primary_institutions": ["Argonne National Laboratory", "University of Chicago"],
+    "type": "simulator", "license": "MIT", "status": "active", "verified": true,
     "grant": "DE-AC02-06CH11357",
-    "topics": ["Quantum Networking", "HPC Simulation"],
-    "paper": { "title": "SeQUeNCe: A customizable discrete-event simulator of quantum networks", "arxiv": "2009.12000" }
+    "topics": ["Quantum Networking", "Entanglement", "Repeaters"]
   },
   {
-    "id": "bosonic-qiskit", "name": "bosonic-qiskit", "tagline": "Hybrid boson-qubit simulation in Qiskit",
-    "description": "Qiskit extension for simulating cavity-QED-style circuits that combine continuous-variable (bosonic) modes with discrete qubits.",
+    "id": "bosonic-qiskit", "name": "bosonic-qiskit", "tagline": "Bosonic-mode extensions for Qiskit",
+    "description": "Plugin adding CV and hybrid qubit-oscillator gates (cat codes, GKP, SNAP, etc.) to the Qiskit framework for continuous-variable quantum computing.",
     "url": "https://github.com/C2QA/bosonic-qiskit",
-    "centers": ["C2QA"], "primary_institutions": ["Brookhaven National Laboratory"],
-    "type": "simulator", "license": "BSD-2-Clause", "status": "active", "verified": true,
+    "centers": ["C2QA"],
+    "primary_institutions": ["Brookhaven National Laboratory"],
+    "type": "simulator", "license": "Apache-2.0", "status": "active", "verified": true,
     "grant": "DE-SC0012704",
-    "topics": ["Bosonic / Hybrid", "HPC Simulation"]
+    "topics": ["Bosonic Codes", "CV Computing", "GKP", "Cat Codes"]
   },
   {
-    "id": "qasmbench", "name": "QASMBench", "tagline": "Low-level OpenQASM benchmark suite",
-    "description": "A NISQ-era benchmark suite of representative algorithms in OpenQASM, used widely for hardware evaluation and simulator validation.",
-    "url": "https://github.com/pnnl/QASMBench",
-    "centers": ["C2QA"], "primary_institutions": ["Pacific Northwest National Laboratory"],
+    "id": "qasmbench", "name": "QASMBench", "tagline": "OpenQASM benchmark suite",
+    "description": "Low-level OpenQASM 2.0 benchmark suite spanning kernel, intermediate, and large scale — covers chemistry, simulation, ML, and cryptography applications.",
+    "url": "https://github.com/pnnl/QASMbench",
+    "centers": ["C2QA"],
+    "primary_institutions": ["Pacific Northwest National Laboratory"],
     "type": "benchmark", "license": "BSD-3-Clause", "status": "active", "verified": true,
     "grant": "DE-SC0012704",
-    "topics": ["Benchmarking", "NISQ"],
-    "paper": { "title": "QASMBench: A Low-Level QASM Benchmark Suite for NISQ Evaluation and Simulation", "arxiv": "2005.13018" }
+    "topics": ["Benchmarking", "OpenQASM", "Circuit Compilation"]
   },
   {
-    "id": "ftprimitivebench", "name": "FTPrimitiveBench", "tagline": "Logical primitives under hardware noise",
-    "description": "Python library for constructing and benchmarking fault-tolerant primitives (memory, transversal H, lattice surgery, logical S) on the rotated surface code under structured and hardware-motivated noise.",
+    "id": "ftprimitivebench", "name": "FTPrimitiveBench", "tagline": "Fault-tolerant primitive benchmarks",
+    "description": "Python library for constructing and benchmarking fault-tolerant primitives (memory, transversal H, lattice surgery, logical S) on the rotated surface code under structured noise.",
     "url": "https://github.com/ShuwenKan/FTPrimitiveBench",
-    "centers": ["QSC"], "primary_institutions": ["PNNL", "Fordham"],
+    "centers": ["QSC"],
+    "primary_institutions": ["Pacific Northwest National Laboratory", "Fordham University"],
     "type": "benchmark", "license": "CC-BY-4.0", "status": "active", "verified": true,
-    "topics": ["Fault Tolerance", "Benchmarking"],
-    "paper": { "title": "FTPrimitiveBench: A Benchmark Suite For Logical Computation Under Hardware-Motivated and Biased Noise Models", "arxiv": "2605.04049" }
+    "topics": ["Fault Tolerance", "Surface Code", "Benchmarking"],
+    "paper": {"title": "FTPrimitiveBench", "arxiv": "2605.04049"}
   },
   {
-    "id": "ftcircuitbench", "name": "FTCircuitBench", "tagline": "Compilation & architecture benchmarks",
-    "description": "End-to-end benchmark suite for fault-tolerant compilation and architecture, covering Clifford+T synthesis (Gridsynth, Solovay-Kitaev) and Pauli-Based Computation pipelines.",
+    "id": "ftcircuitbench", "name": "FTCircuitBench", "tagline": "End-to-end fault-tolerant circuit benchmarks",
+    "description": "Benchmark suite for fault-tolerant compilation and architecture spanning Clifford+T synthesis and Pauli-Based Computation pipelines.",
     "url": "https://github.com/AdrianHarkness/FTCircuitBench",
-    "centers": ["QSC"], "primary_institutions": ["PNNL", "Lehigh", "Fordham", "MIT"],
+    "centers": ["QSC"],
+    "primary_institutions": ["PNNL", "Lehigh University", "Fordham University", "MIT"],
     "type": "benchmark", "license": "MIT", "status": "active", "verified": true,
-    "topics": ["Fault Tolerance", "Compilation", "Benchmarking"],
-    "paper": { "title": "FTCircuitBench: A Benchmark Suite for Fault-Tolerant Quantum Compilation and Architecture", "arxiv": "2601.03185" }
+    "topics": ["Fault Tolerance", "Clifford+T", "Benchmarking"],
+    "paper": {"title": "FTCircuitBench", "arxiv": "2601.03185"}
   },
   {
     "id": "xacc", "name": "XACC", "tagline": "eXtreme-scale Accelerator framework",
-    "description": "A polyglot programming framework for hybrid quantum-classical computing with backends for major hardware and simulators.",
+    "description": "Extensible compiler and runtime framework for hybrid quantum-classical computing — provides language-agnostic IR, backend plugins, and a universal accelerator-programming model.",
     "url": "https://github.com/ORNL-QCI/xacc",
-    "centers": ["QSC"], "primary_institutions": ["Oak Ridge National Laboratory"],
+    "centers": ["QSC"],
+    "primary_institutions": ["Oak Ridge National Laboratory"],
     "type": "framework", "license": "BSD-3-Clause", "status": "pending", "verified": false,
-    "topics": ["Compilation"]
+    "topics": ["Compiler", "Hybrid Computing", "Runtime"]
   },
   {
-    "id": "qcor", "name": "QCOR", "tagline": "Quantum-classical C++ compiler",
-    "description": "A Clang/XACC-based C++ compiler for heterogeneous quantum-classical programs, with a single-source programming model.",
+    "id": "qcor", "name": "QCOR", "tagline": "C++ quantum compiler on Clang + XACC",
+    "description": "Single-source C++ programming model for heterogeneous quantum-classical systems, lowering to XACC IR via Clang plugin.",
     "url": "https://github.com/ORNL-QCI/qcor",
-    "centers": ["QSC"], "primary_institutions": ["Oak Ridge National Laboratory"],
+    "centers": ["QSC"],
+    "primary_institutions": ["Oak Ridge National Laboratory"],
     "type": "compiler", "license": "BSD-3-Clause", "status": "pending", "verified": false,
-    "topics": ["Compilation"]
+    "topics": ["Compiler", "C++", "Hybrid Computing"]
   },
   {
-    "id": "qiree", "name": "qiree", "tagline": "QIR Execution Engine on LLVM",
-    "description": "Interfaces for processing Quantum Intermediate Representation (QIR) code using the LLVM execution engine.",
+    "id": "qiree", "name": "qiree", "tagline": "QIR Execution Engine via LLVM",
+    "description": "Executes Quantum Intermediate Representation (QIR) bitcode using LLVM JIT, enabling backend-agnostic hybrid quantum-classical programs.",
     "url": "https://github.com/ORNL-QCI/qiree",
-    "centers": ["QSC"], "primary_institutions": ["Oak Ridge National Laboratory"],
-    "type": "compiler", "license": "see repo", "status": "pending", "verified": false,
-    "topics": ["Compilation"]
+    "centers": ["QSC"],
+    "primary_institutions": ["Oak Ridge National Laboratory"],
+    "type": "compiler", "license": "Apache-2.0", "status": "pending", "verified": false,
+    "topics": ["QIR", "LLVM", "Compiler"]
   },
   {
-    "id": "tnqvm", "name": "TNQVM", "tagline": "Tensor-network QPU simulator",
-    "description": "Tensor-network virtual machine backend for XACC, providing scalable simulation of quantum circuits via contraction strategies.",
+    "id": "tnqvm", "name": "TNQVM", "tagline": "Tensor-network QPU simulator for XACC",
+    "description": "Tensor-network based quantum virtual machine plugin for XACC supporting MPS, full-tensor, and ExaTN backends.",
     "url": "https://github.com/ORNL-QCI/tnqvm",
-    "centers": ["QSC"], "primary_institutions": ["Oak Ridge National Laboratory"],
+    "centers": ["QSC"],
+    "primary_institutions": ["Oak Ridge National Laboratory"],
     "type": "simulator", "license": "BSD-3-Clause", "status": "pending", "verified": false,
-    "topics": ["Tensor Networks", "HPC Simulation"]
+    "topics": ["Tensor Networks", "Simulation", "MPS"]
   },
   {
-    "id": "exatn", "name": "ExaTN", "tagline": "Tensor networks at exascale",
-    "description": "Hierarchical tensor-network library targeting exascale heterogeneous HPC platforms.",
+    "id": "exatn", "name": "ExaTN", "tagline": "Hierarchical tensor networks at exascale",
+    "description": "Numerical processing library for tensor networks on classical HPC systems, supporting distributed contraction at exascale for quantum simulation.",
     "url": "https://github.com/ORNL-QCI/exatn",
-    "centers": ["QSC"], "primary_institutions": ["Oak Ridge National Laboratory"],
+    "centers": ["QSC"],
+    "primary_institutions": ["Oak Ridge National Laboratory"],
     "type": "library", "license": "BSD-3-Clause", "status": "pending", "verified": false,
-    "topics": ["Tensor Networks", "HPC Simulation"]
+    "topics": ["Tensor Networks", "HPC", "Exascale"]
   },
   {
-    "id": "dm-sim", "name": "DM-Sim", "tagline": "GPU-cluster density-matrix simulator for noisy quantum circuits.",
-    "description": "GPU-cluster density-matrix simulator for noisy quantum circuits.",
+    "id": "dm-sim", "name": "DM-Sim", "tagline": "GPU density-matrix quantum circuit simulator",
+    "description": "GPU-cluster density-matrix simulator for noisy quantum circuits, scaling to hundreds of qubits on multi-GPU nodes.",
     "url": "https://github.com/ORNL-QCI/DM-Sim",
-    "centers": ["QSC"], "primary_institutions": [],
+    "centers": ["QSC"],
+    "primary_institutions": ["Oak Ridge National Laboratory", "Pacific Northwest National Laboratory"],
     "type": "simulator", "license": "BSD-3-Clause", "status": "active", "verified": true,
-    "topics": ["HPC Simulation"]
+    "topics": ["Density Matrix", "GPU Simulation", "Noise"]
   },
   {
-    "id": "sv-sim", "name": "SV-Sim", "tagline": "Scalable state-vector simulator",
-    "description": "PGAS-based state-vector simulator scaling across multi-node, multi-GPU HPC systems.",
+    "id": "sv-sim", "name": "SV-Sim", "tagline": "Scalable state-vector simulator using PGAS",
+    "description": "Distributed state-vector quantum circuit simulator built on Partitioned Global Address Space (PGAS) for supercomputer-scale workloads.",
     "url": "https://github.com/ORNL-QCI/SV-Sim",
-    "centers": ["QSC"], "primary_institutions": ["Oak Ridge National Laboratory", "Pacific Northwest National Laboratory"],
+    "centers": ["QSC"],
+    "primary_institutions": ["Oak Ridge National Laboratory"],
     "type": "simulator", "license": "BSD-3-Clause", "status": "pending", "verified": false,
-    "topics": ["HPC Simulation"]
+    "topics": ["State Vector", "HPC Simulation", "PGAS"]
   },
   {
-    "id": "quandary", "name": "Quandary", "tagline": "Optimal control for open quantum systems",
-    "description": "Toolkit for time-dependent optimal control synthesis on open quantum systems, used for pulse shaping at the lab level.",
+    "id": "quandary", "name": "Quandary", "tagline": "Optimal-control toolkit for open quantum systems",
+    "description": "C++ toolkit for optimal control of open quantum systems, computing control pulses that drive a quantum system toward a target state or unitary.",
     "url": "https://github.com/ORNL-QCI/quandary",
-    "centers": ["QSC"], "primary_institutions": ["Lawrence Livermore National Laboratory", "Oak Ridge National Laboratory"],
-    "type": "control", "license": "MIT", "status": "pending", "verified": false,
-    "topics": ["Control & Pulse", "Open Quantum Systems"]
+    "centers": ["QSC"],
+    "primary_institutions": ["Oak Ridge National Laboratory"],
+    "type": "other", "license": "MIT", "status": "pending", "verified": false,
+    "topics": ["Optimal Control", "Open Quantum Systems"]
   },
   {
     "id": "quac", "name": "QuaC", "tagline": "Time-dependent open-quantum-systems solver",
-    "description": "C library for simulating time-dependent open quantum systems via Lindblad equations.",
+    "description": "Parallel solver for the time-dependent Lindblad master equation, modeling open quantum systems with realistic noise.",
     "url": "https://github.com/ORNL-QCI/QuaC",
-    "centers": ["QSC"], "primary_institutions": ["Argonne National Laboratory"],
-    "type": "simulator", "license": "BSD-3-Clause", "status": "pending", "verified": false,
-    "topics": ["Open Quantum Systems", "HPC Simulation"]
+    "centers": ["QSC"],
+    "primary_institutions": ["Oak Ridge National Laboratory"],
+    "type": "simulator", "license": "MIT", "status": "pending", "verified": false,
+    "topics": ["Open Quantum Systems", "Lindblad", "Noise Modeling"]
   },
   {
-    "id": "nwqec", "name": "nwqec", "tagline": "Fault-tolerant circuit transpilation and T-count optimization",
-    "description": "A toolkit for fault-tolerant quantum circuit transpilation and T-count optimization.",
+    "id": "nwqec", "name": "nwqec", "tagline": "Fault-tolerant quantum circuit transpilation toolkit",
+    "description": "Toolkit for fault-tolerant quantum circuit transpilation and T-count optimization, with surface-code compilation support.",
     "url": "https://github.com/pnnl/nwqec",
-    "centers": ["C2QA", "QSC"], "primary_institutions": ["Pacific Northwest National Laboratory"],
+    "centers": ["C2QA", "QSC"],
+    "primary_institutions": ["Pacific Northwest National Laboratory"],
     "type": "benchmark", "license": "MIT", "status": "active", "verified": true,
     "grant": "DE-SC0012704",
-    "topics": ["Fault Tolerance", "Compilation", "Benchmarking"]
+    "topics": ["Fault Tolerance", "T-Count Optimization", "Surface Code"]
   },
   {
-    "id": "qasmtrans", "name": "qasmtrans", "tagline": "A C++ based quantum transpiler for NISQ devices",
-    "description": "A C++ based quantum transpiler for NISQ devices.",
+    "id": "qasmtrans", "name": "qasmtrans", "tagline": "C++ quantum transpiler for NISQ devices",
+    "description": "High-performance C++ quantum transpiler for mapping and optimizing OpenQASM circuits on NISQ hardware.",
     "url": "https://github.com/pnnl/qasmtrans",
-    "centers": ["QSC"], "primary_institutions": ["Pacific Northwest National Laboratory"],
+    "centers": ["QSC"],
+    "primary_institutions": ["Pacific Northwest National Laboratory"],
     "type": "compiler", "license": "NOASSERTION", "status": "active", "verified": true,
-    "grant": "DE-AC05-00OR22725",
-    "topics": ["Compilation", "Benchmarking", "NISQ"]
+    "topics": ["Compiler", "NISQ", "Circuit Optimization"]
+  },
+  {
+    "id": "stabsim",
+    "name": "STABSim",
+    "tagline": "GPU-accelerated quantum stabilizer simulator for QEC",
+    "description": "Quantum stabilizer simulator with GPU (CUDA) and MPI support, targeting quantum error correction workflows. Supports Clifford+single-RZ circuits and multiple input formats including Stim and QASM.",
+    "url": "https://github.com/seangarn32/STABSim",
+    "centers": [
+      "QSC"
+    ],
+    "primary_institutions": [
+      "Pacific Northwest National Laboratory"
+    ],
+    "type": "simulator",
+    "license": "",
+    "status": "pending",
+    "verified": false,
+    "topics": [
+      "Fault Tolerance",
+      "HPC Simulation"
+    ],
+    "paper": {
+      "title": "",
+      "arxiv": "2507.03092"
+    }
   }
 ]
 </script>
-
 <script>
-(() => {
-  const DATA = JSON.parse(document.getElementById('data').textContent);
-  const grid = document.getElementById('grid');
-  const qInput = document.getElementById('q');
-  const sortSel = document.getElementById('sort');
-  const resultCount = document.getElementById('resultCount');
-  const updatedAt = document.getElementById('updatedAt');
+(function(){
+const data=JSON.parse(document.getElementById('data').textContent);
+const grid=document.getElementById('grid');
+const stats=document.getElementById('stats');
+const qEl=document.getElementById('q');
+const fCenter=document.getElementById('fCenter');
+const fType=document.getElementById('fType');
+const fStatus=document.getElementById('fStatus');
 
-  const CENTERS = ["C2QA","Q-NEXT","QSA","QSC","SQMS"];
-  const TYPES = [...new Set(DATA.flatMap(d => [d.type]))].sort();
-  const STATUSES = ["active","pending"];
-  // Topic order: hand-curated to put the most-asked-for areas first.
-  const TOPIC_ORDER = [
-    "Fault Tolerance", "Quantum Networking", "Bosonic / Hybrid",
-    "Control & Pulse", "Compilation", "HPC Simulation",
-    "Tensor Networks", "Open Quantum Systems", "Quantum Sensing",
-    "Benchmarking", "NISQ", "FPGA / Hardware"
-  ];
-  const DATA_TOPICS = new Set(DATA.flatMap(d => d.topics || []));
-  const TOPICS = [
-    ...TOPIC_ORDER.filter(t => DATA_TOPICS.has(t)),
-    ...[...DATA_TOPICS].filter(t => !TOPIC_ORDER.includes(t)).sort(),
-  ];
+function center_color(c){
+  const m={C2QA:'#6610f2',SQMS:'#e83e8c','Q-NEXT':'#fd7e14',QSA:'#20c997',QSC:'#0d6efd'};
+  return m[c]||'#6c757d';
+}
 
-  const state = {
-    q: "",
-    topics: new Set(),
-    centers: new Set(),
-    types: new Set(),
-    statuses: new Set(),
-    sort: "name",
-  };
+function render(items){
+  stats.textContent=`Showing ${items.length} of ${data.length} entries`;
+  if(!items.length){grid.innerHTML='<div class="empty">No entries match your filters.</div>';return;}
+  grid.innerHTML=items.map(d=>{
+    const centers=(d.centers||[]).map(c=>`<span class="badge center-badge" style="background:${center_color(c)}22;color:${center_color(c)}">${c}</span>`).join(' ');
+    const type=d.type?`<span class="badge type-badge">${d.type}</span>`:'';
+    const status=d.status?`<span class="badge status-${d.status}">${d.status}</span>`:'';
+    const paper=d.paper&&d.paper.arxiv?`<div class="paper-link">📄 <a href="https://arxiv.org/abs/${d.paper.arxiv}" target="_blank" rel="noopener">${d.paper.title||'arXiv:'+d.paper.arxiv}</a></div>`:'';
+    return `<div class="card" data-id="${d.id}">
+      <div class="card-top"><h2><a href="${d.url}" target="_blank" rel="noopener">${d.name}</a></h2>${status}</div>
+      ${d.tagline?`<div class="tagline">${d.tagline}</div>`:''}
+      ${d.description?`<div class="desc">${d.description}</div>`:''}
+      <div class="meta">${centers}${type}</div>
+      ${paper}
+    </div>`;
+  }).join('');
+}
 
-  /* ─── Build filter chip rows ────────────────────────── */
-
-  function buildChips(rowId, items, key, opts = {}) {
-    const row = document.getElementById(rowId);
-    const allChip = mkChip("All", () => {
-      state[key].clear();
-      render();
-    });
-    allChip.classList.add('active');
-    row.appendChild(allChip);
-    items.forEach(item => {
-      const c = mkChip(opts.label ? opts.label(item) : item, () => {
-        if (state[key].has(item)) state[key].delete(item);
-        else state[key].add(item);
-        render();
-      });
-      if (key === 'centers') {
-        c.dataset.center = item;
-        const dot = document.createElement('span');
-        dot.className = 'dot';
-        c.prepend(dot);
-      }
-      c.dataset.value = item;
-      row.appendChild(c);
-    });
-  }
-  function mkChip(label, onClick) {
-    const b = document.createElement('button');
-    b.className = 'chip';
-    b.type = 'button';
-    b.append(document.createTextNode(label));
-    b.addEventListener('click', onClick);
-    return b;
-  }
-  function syncChips(rowId, key) {
-    const row = document.getElementById(rowId);
-    const allBtn = row.querySelector('.chip');
-    const set = state[key];
-    allBtn.classList.toggle('active', set.size === 0);
-    row.querySelectorAll('.chip[data-value]').forEach(c => {
-      c.classList.toggle('active', set.has(c.dataset.value));
-    });
-  }
-
-  buildChips('topicFilters',  TOPICS,  'topics');
-  buildChips('centerFilters', CENTERS, 'centers');
-  buildChips('typeFilters',   TYPES,   'types');
-  buildChips('statusFilters', STATUSES,'statuses');
-
-  /* ─── Filtering, sorting, rendering ─────────────────── */
-
-  function matches(d) {
-    if (state.centers.size && !d.centers.some(c => state.centers.has(c))) return false;
-    if (state.types.size   && !state.types.has(d.type)) return false;
-    if (state.statuses.size && !state.statuses.has(d.status)) return false;
-    if (state.topics.size && !(d.topics || []).some(t => state.topics.has(t))) return false;
-    if (state.q) {
-      const q = state.q.toLowerCase();
-      const hay = [
-        d.name, d.tagline, d.description,
-        d.centers.join(' '),
-        (d.topics || []).join(' '),
-        d.primary_institutions?.join(' ') || '',
-        d.type, d.license, d.grant || '',
-        d.paper?.title || '', d.paper?.arxiv || ''
-      ].join(' ').toLowerCase();
-      // Topic free-text aliases — researcher's vocabulary
-      const aliases = {
-        'fault tolerance': ['fault tolerance', 'fault-tolerant', 'qec', 'quantum error correction', 'surface code'],
-        'qec':             ['qec', 'fault tolerance', 'fault-tolerant', 'error correction'],
-        'ft':              ['fault tolerance', 'fault-tolerant'],
-        'networking':      ['networking', 'network'],
-        'tensor network':  ['tensor network', 'mps', 'mpo'],
-        'noise':           ['noise', 'noisy', 'biased', 'pauli'],
-      };
-      const aliased = aliases[q] || [q];
-      if (!aliased.some(a => hay.includes(a))) return false;
+function filter(){
+  const q=qEl.value.toLowerCase();
+  const c=fCenter.value;
+  const t=fType.value;
+  const s=fStatus.value;
+  render(data.filter(d=>{
+    if(c&&!(d.centers||[]).includes(c))return false;
+    if(t&&d.type!==t)return false;
+    if(s&&d.status!==s)return false;
+    if(q){
+      const hay=[d.name,d.tagline,d.description,...(d.topics||[])].join(' ').toLowerCase();
+      if(!hay.includes(q))return false;
     }
     return true;
-  }
-
-  function sortFn(a, b) {
-    switch (state.sort) {
-      case 'center': return a.centers[0].localeCompare(b.centers[0]) || a.name.localeCompare(b.name);
-      case 'type':   return a.type.localeCompare(b.type) || a.name.localeCompare(b.name);
-      case 'status': return a.status.localeCompare(b.status) || a.name.localeCompare(b.name);
-      default:       return a.name.localeCompare(b.name);
-    }
-  }
-
-  function pad(n) { return String(n).padStart(3, '0'); }
-
-  function renderCard(d, i) {
-    const card = document.createElement('article');
-    card.className = 'card';
-    card.dataset.center = d.centers[0];
-
-    // Kebab menu (top-right)
-    const menuBtn = document.createElement('button');
-    menuBtn.type = 'button';
-    menuBtn.className = 'card-menu';
-    menuBtn.setAttribute('aria-label', `Menu for ${d.name}`);
-    menuBtn.setAttribute('aria-haspopup', 'true');
-    menuBtn.setAttribute('aria-expanded', 'false');
-    menuBtn.textContent = '⋯';
-
-    const popover = document.createElement('div');
-    popover.className = 'card-menu-popover';
-    popover.setAttribute('role', 'menu');
-    const correctBtn = document.createElement('button');
-    correctBtn.type = 'button';
-    correctBtn.setAttribute('role', 'menuitem');
-    correctBtn.textContent = '✎ Submit correction / issue';
-    correctBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      closeAllPopovers();
-      window.openCorrection(d);
-    });
-    popover.appendChild(correctBtn);
-
-    menuBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const wasOpen = popover.classList.contains('open');
-      closeAllPopovers();
-      if (!wasOpen) {
-        popover.classList.add('open');
-        menuBtn.setAttribute('aria-expanded', 'true');
-      }
-    });
-
-    card.appendChild(menuBtn);
-    card.appendChild(popover);
-
-    const head = document.createElement('div');
-    head.className = 'card-head';
-    head.innerHTML = `<span class="card-num">№ ${pad(i + 1)}</span>`;
-    const pills = document.createElement('div');
-    pills.className = 'card-centers';
-    d.centers.forEach(c => {
-      const p = document.createElement('span');
-      p.className = 'card-pill';
-      p.dataset.center = c;
-      p.textContent = c;
-      pills.appendChild(p);
-    });
-    head.appendChild(pills);
-
-    const h3 = document.createElement('h3');
-    const a = document.createElement('a');
-    a.href = d.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
-    a.textContent = d.name;
-    h3.appendChild(a);
-
-    const tagline = document.createElement('p');
-    tagline.className = 'tagline';
-    tagline.textContent = d.tagline;
-
-    const desc = document.createElement('p');
-    desc.className = 'desc';
-    desc.textContent = d.description;
-
-    const meta = document.createElement('div');
-    meta.className = 'card-meta';
-    meta.innerHTML = `
-      <span class="tag tag-type">${escapeHtml(d.type)}</span>
-      <span class="tag">${escapeHtml(d.license || '—')}</span>
-      <span class="tag tag-status-${d.status}">${d.status}</span>
-    `;
-
-    const topicRow = document.createElement('div');
-    topicRow.className = 'card-topics';
-    (d.topics || []).forEach(t => {
-      const span = document.createElement('button');
-      span.type = 'button';
-      span.className = 'topic';
-      span.textContent = t;
-      span.title = `Filter by topic: ${t}`;
-      span.addEventListener('click', (e) => {
-        e.preventDefault(); e.stopPropagation();
-        if (state.topics.has(t)) state.topics.delete(t);
-        else state.topics.add(t);
-        render();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-      topicRow.appendChild(span);
-    });
-
-    const footer = document.createElement('div');
-    footer.className = 'card-footer';
-    const institutions = (d.primary_institutions || []).join(' · ');
-    const grantLine = d.grant ? `<span class="grant">${escapeHtml(d.grant)}</span>` : '';
-    const paperLine = d.paper ? `<a href="https://arxiv.org/abs/${d.paper.arxiv}" target="_blank" rel="noopener">arXiv:${d.paper.arxiv}</a>` : '';
-    const noteLine  = d.note ? `<span style="color:var(--accent-soft); font-style: italic;">${escapeHtml(d.note)}</span>` : '';
-    footer.innerHTML = `
-      <span>${escapeHtml(institutions)}</span>
-      ${paperLine}
-      ${grantLine}
-      ${noteLine}
-    `;
-
-    card.append(head, h3, tagline, desc, meta);
-    if (topicRow.children.length) card.appendChild(topicRow);
-    card.appendChild(footer);
-    return card;
-  }
-
-  function escapeHtml(s) {
-    return String(s ?? '').replace(/[&<>"']/g, c => ({
-      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-    }[c]));
-  }
-
-  function closeAllPopovers() {
-    document.querySelectorAll('.card-menu-popover.open').forEach(p => {
-      p.classList.remove('open');
-      const btn = p.previousElementSibling;
-      if (btn && btn.classList.contains('card-menu')) btn.setAttribute('aria-expanded', 'false');
-    });
-  }
-  document.addEventListener('click', closeAllPopovers);
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllPopovers(); });
-
-  function render() {
-    syncChips('topicFilters',  'topics');
-    syncChips('centerFilters', 'centers');
-    syncChips('typeFilters',   'types');
-    syncChips('statusFilters', 'statuses');
-
-    const filtered = DATA.filter(matches).sort(sortFn);
-    grid.innerHTML = '';
-    if (filtered.length === 0) {
-      const e = document.createElement('div');
-      e.className = 'empty';
-      e.textContent = 'No entries match those filters.';
-      grid.appendChild(e);
-    } else {
-      filtered.forEach((d, i) => grid.appendChild(renderCard(d, i)));
-    }
-    resultCount.textContent = `${filtered.length} of ${DATA.length}`;
-  }
-
-  /* ─── Stats ─────────────────────────────────────────── */
-
-  function fillStats() {
-    document.querySelector('[data-stat="total"]').textContent = DATA.length;
-    CENTERS.forEach(c => {
-      const n = DATA.filter(d => d.centers.includes(c)).length;
-      const el = document.querySelector(`[data-stat="${c}"]`);
-      if (el) el.textContent = n;
-    });
-  }
-  fillStats();
-
-  /* ─── Wire events ───────────────────────────────────── */
-
-  qInput.addEventListener('input', e => { state.q = e.target.value.trim(); render(); });
-  sortSel.addEventListener('change', e => { state.sort = e.target.value; render(); });
-
-  // Keyboard: focus search on '/'
-  window.addEventListener('keydown', e => {
-    if (e.key === '/' && document.activeElement !== qInput) {
-      e.preventDefault(); qInput.focus(); qInput.select();
-    }
-  });
-
-  /* ─── Initial render ────────────────────────────────── */
-
-  const today = new Date();
-  updatedAt.textContent = `Updated ${today.toISOString().slice(0,10)}`;
-  render();
-})();
-</script>
-
-<script>
-/* ─── Submission flow ────────────────────────────────────
-   Paste a GitHub URL → fetch repo + README from the GitHub
-   public API (CORS-enabled) → detect explicit NQI center
-   acknowledgments and DOE contract numbers → show a
-   preview → "Open issue" links to a pre-filled GitHub Issue
-   for human review.
-   ───────────────────────────────────────────────────────── */
-(() => {
-  const REPO = "Samuelstein1224/NQI_Software";
-
-  // Center detection patterns. Order matters: more specific first.
-  const CENTER_PATTERNS = [
-    { center: "C2QA",   re: /\bC2QA\b|Co[-\s]?design Center for Quantum Advantage|DE[-\s]?SC0012704/i },
-    { center: "Q-NEXT", re: /\bQ[-\s]?NEXT\b|Q\.NEXT|DE[-\s]?AC02[-\s]?06CH11357/i },
-    { center: "QSA",    re: /\bQSA\b|Quantum Systems Accelerator|DE[-\s]?AC02[-\s]?05CH11231/i },
-    { center: "QSC",    re: /\bQSC\b|Quantum Science Center|DE[-\s]?FOA[-\s]?0002253/i },
-    { center: "SQMS",   re: /\bSQMS\b|Superconducting Quantum Materials and Systems|DE[-\s]?AC02[-\s]?07CH11359/i },
-  ];
-
-  // DOE contract patterns — catch DE-AC02-07CH11359, DE-SC0012704, DE-FOA-0002253, etc.
-  const GRANT_RE = /\bDE[-\s][A-Z0-9]{2,6}(?:[-\s][A-Z0-9]+){1,3}\b/g;
-
-  const TYPE_HINTS = [
-    { type: "benchmark", re: /\bbenchmark|benchmarking|evaluation suite/i },
-    { type: "simulator", re: /\bsimulat(or|ion)|emulator|tensor network|state[-\s]vector|density matrix/i },
-    { type: "compiler",  re: /\bcompil(er|ation)|transpiler|synthesis|gridsynth/i },
-    { type: "control",   re: /\bcontrol|firmware|pulse|FPGA|waveform|readout/i },
-    { type: "framework", re: /\bSDK|framework|programming model/i },
-  ];
-
-  // Topic keyword map — used to auto-suggest topics from README + description.
-  const TOPIC_RULES = [
-    { topic: "Fault Tolerance",     re: /fault[-\s]?toleran|\bqec\b|quantum error correction|surface code|color code|stabili[sz]er code|magic state/i },
-    { topic: "Quantum Networking",  re: /quantum network|quantum internet|entanglement distribution|repeater|teleport|photonic link/i },
-    { topic: "Bosonic / Hybrid",    re: /bosonic|continuous[-\s]variable|cavity[-\s]?QED|cat qubit|GKP|hybrid (qubit|boson)/i },
-    { topic: "Control & Pulse",     re: /pulse[-\s]?(shap|level|sequenc)|optimal control|waveform|cQED control|qubit control|readout/i },
-    { topic: "FPGA / Hardware",     re: /\bFPGA\b|RFSoC|ZCU|Xilinx|Zynq|PYNQ/i },
-    { topic: "Compilation",         re: /compil(er|ation|ing)|transpile|gate synthesis|gridsynth|solovay[-\s]?kitaev|QIR|qcor/i },
-    { topic: "Tensor Networks",     re: /tensor[-\s]?network|matrix[-\s]product[-\s]state|tensor[-\s]contraction|\bDMRG\b/i },
-    { topic: "HPC Simulation",      re: /\bHPC\b|exascale|distributed simulation|multi[-\s]?node|\bMPI\b|GPU cluster/i },
-    { topic: "Open Quantum Systems",re: /open quantum system|Lindblad|master equation|dissipat/i },
-    { topic: "Quantum Sensing",     re: /quantum sens|NV[-\s]centre|NV[-\s]center|magnetometry|defect (qubit|spin)/i },
-    { topic: "Benchmarking",        re: /benchmark|benchmarking suite/i },
-    { topic: "NISQ",                re: /\bNISQ\b|near[-\s]?term|noisy intermediate/i },
-  ];
-
-  function detectTopics(text) {
-    if (!text) return [];
-    const out = [];
-    for (const r of TOPIC_RULES) {
-      if (r.re.test(text)) out.push(r.topic);
-    }
-    return out;
-  }
-
-  // DOM
-  const $ = (s) => document.querySelector(s);
-  const modal = $('#modal');
-  const openBtn = $('#openSubmit');
-  const closeBtn = $('#closeSubmit');
-  const urlInput = $('#repoUrl');
-  const analyzeBtn = $('#analyzeBtn');
-  const preview = $('#preview');
-
-  let lastResult = null;
-  let mode = 'submission'; // 'submission' | 'correction'
-
-  const urlSection = $('#urlSection');
-  const modalTitle = $('#modalTitle');
-  const modalIntro = $('#modalIntro');
-
-  function setMode(m, entryName) {
-    mode = m;
-    if (m === 'submission') {
-      modalTitle.innerHTML = `Request <em>software</em> addition`;
-      modalIntro.textContent = `Paste a GitHub URL. We'll fetch the repository's README, license, and metadata, look for explicit acknowledgments of the five NQI centers (C2QA, Q-NEXT, QSA, QSC, SQMS) and known DOE contract numbers, then preview a structured entry. Confirm to open a pre-filled GitHub issue — a maintainer reviews and merges it into the archive.`;
-      urlSection.style.display = '';
-    } else {
-      modalTitle.innerHTML = `Submit <em>correction</em>`;
-      modalIntro.innerHTML = `Editing <strong>${escapeHtml(entryName)}</strong>. Edit any field, add a reason for the change, and submit to open a pre-filled GitHub issue — a maintainer reviews each correction before merging.`;
-      urlSection.style.display = 'none';
-    }
-  }
-
-  function openAddition() {
-    setMode('submission');
-    modal.classList.add('open');
-    setTimeout(() => urlInput.focus(), 30);
-  }
-  // expose for the card kebab menu
-  window.openCorrection = function (entry) {
-    setMode('correction', entry.name);
-    modal.classList.add('open');
-    // synthesise a "result" object so renderPreview can re-use its form
-    const synth = {
-      owner: (entry.url.split('/')[3] || ''),
-      name: entry.name,
-      url: entry.url,
-      description: entry.description || '',
-      license: entry.license || '',
-      language: '',
-      stars: '—',
-      updated: '',
-      topics: [],
-      readmeLength: 0,
-      centers: entry.centers || [],
-      grants: entry.grant ? [entry.grant] : [],
-      inferredType: entry.type,
-      inferredTopics: entry.topics || [],
-      ackSnippet: '',
-      _existingId: entry.id,
-    };
-    renderPreview(synth);
-  };
-  function close() {
-    modal.classList.remove('open');
-    preview.classList.remove('shown');
-    preview.innerHTML = '';
-    urlInput.value = '';
-    lastResult = null;
-    mode = 'submission';
-    setMode('submission');
-  }
-
-  openBtn.addEventListener('click', openAddition);
-  closeBtn.addEventListener('click', close);
-  modal.addEventListener('click', e => { if (e.target === modal) close(); });
-  window.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && modal.classList.contains('open')) close();
-  });
-
-  function parseGithubUrl(s) {
-    if (!s) return null;
-    try {
-      const u = new URL(s.trim());
-      if (!/github\.com$/i.test(u.hostname)) return null;
-      const parts = u.pathname.replace(/^\/|\/$/g, '').split('/');
-      if (parts.length < 2) return null;
-      return { owner: parts[0], repo: parts[1].replace(/\.git$/, '') };
-    } catch { return null; }
-  }
-
-  async function fetchJSON(url) {
-    const r = await fetch(url, { headers: { 'Accept': 'application/vnd.github+json' } });
-    if (r.status === 404) throw Object.assign(new Error('Repository not found'), { code: 404 });
-    if (r.status === 403) throw Object.assign(new Error('GitHub API rate limit hit — try again in an hour'), { code: 403 });
-    if (!r.ok) throw new Error(`GitHub API ${r.status}`);
-    return r.json();
-  }
-  async function fetchText(url) {
-    const r = await fetch(url);
-    if (!r.ok) throw new Error('not found');
-    return r.text();
-  }
-
-  async function fetchReadme(owner, repo, defaultBranch) {
-    const tries = ['README.md','README.MD','Readme.md','README.rst','readme.md','README'];
-    for (const name of tries) {
-      try { return await fetchText(`https://raw.githubusercontent.com/${owner}/${repo}/${defaultBranch}/${name}`); }
-      catch {}
-    }
-    // GitHub API fallback
-    try {
-      const meta = await fetchJSON(`https://api.github.com/repos/${owner}/${repo}/readme`);
-      return atob(meta.content.replace(/\n/g, ''));
-    } catch { return ''; }
-  }
-
-  function detectCenters(text) {
-    if (!text) return [];
-    const found = new Set();
-    CENTER_PATTERNS.forEach(p => { if (p.re.test(text)) found.add(p.center); });
-    return Array.from(found);
-  }
-
-  function detectGrants(text) {
-    if (!text) return [];
-    const m = text.match(GRANT_RE) || [];
-    return Array.from(new Set(m.map(s => s.replace(/\s+/g, '-').toUpperCase())));
-  }
-
-  function detectType(text, language) {
-    if (!text) return 'library';
-    const matches = TYPE_HINTS.filter(h => h.re.test(text));
-    if (matches.length) return matches[0].type;
-    return 'library';
-  }
-
-  function findAckSnippet(text) {
-    if (!text) return '';
-    const lines = text.split('\n');
-    // find an "acknowledgments" or "funding" heading and grab next ~6 lines
-    for (let i = 0; i < lines.length; i++) {
-      if (/^#+\s*(acknowledg(e?ments?|ements?)|funding|support)/i.test(lines[i])) {
-        return lines.slice(i, i + 8).join('\n').trim();
-      }
-    }
-    // otherwise find the first NQI-mentioning line and 1 line of context
-    for (let i = 0; i < lines.length; i++) {
-      if (CENTER_PATTERNS.some(p => p.re.test(lines[i]))) {
-        const lo = Math.max(0, i - 1), hi = Math.min(lines.length, i + 3);
-        return lines.slice(lo, hi).join('\n').trim();
-      }
-    }
-    return '';
-  }
-
-  function pad3(n) { return String(n).padStart(3, '0'); }
-
-  function escapeHtml(s) {
-    return String(s ?? '').replace(/[&<>"']/g, c => ({
-      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-    }[c]));
-  }
-
-  function renderError(message) {
-    preview.classList.add('shown');
-    preview.innerHTML = `<div class="err">${escapeHtml(message)}</div>`;
-  }
-
-  const ALL_CENTERS = ["C2QA","Q-NEXT","QSA","QSC","SQMS"];
-  const TYPE_OPTIONS = ["control","simulator","benchmark","compiler","framework","library","dataset","other"];
-
-  // Holds the user-edited values (initialised from detection).
-  let edits = null;
-
-  function renderPreview(r) {
-    lastResult = r;
-
-    const isCorrection = mode === 'correction';
-
-    // Initialise editable state from the detected (or existing) values.
-    edits = {
-      description: r.description || '',
-      license: r.license || '',
-      type: r.inferredType,
-      centers: new Set(r.centers),
-      grant: r.grants[0] || '',
-      status: r.centers.length ? 'active' : 'pending',
-      topics: (r.inferredTopics || []).join(', '),
-      ack: r.ackSnippet || '',
-      reason: '',
-    };
-
-    preview.classList.add('shown');
-    preview.innerHTML = `
-      <div class="preview-head">
-        <h3>${isCorrection ? 'Edit fields and submit correction' : 'Detected fields — edit before submitting'}</h3>
-        ${isCorrection ? '' : '<button type="button" class="reset" id="resetEdits">↻ Reset to detected</button>'}
-      </div>
-
-      ${r.centers.length === 0 ? `
-        <div class="callout">
-          <strong>No NQI center acknowledgment found</strong> in the README or repo description.
-          Toggle the correct centers manually and paste the acknowledgments excerpt from the
-          paper if available — a maintainer will verify before merging.
-        </div>` : ''}
-
-      <div class="row">
-        <span class="k">Repository</span>
-        <span class="v"><a href="${escapeHtml(r.url)}" target="_blank" rel="noopener">${escapeHtml(r.owner)}/${escapeHtml(r.name)}</a> &nbsp;·&nbsp; <span style="color:var(--ink-3)">${r.stars ?? '—'}★ &nbsp;${r.updated || '—'} &nbsp;${escapeHtml(r.language || '')}</span></span>
-      </div>
-
-      <div class="row">
-        <span class="k">Description</span>
-        <span class="v row-wide"><textarea name="f-description" rows="2">${escapeHtml(edits.description)}</textarea></span>
-      </div>
-
-      <div class="row">
-        <span class="k">License</span>
-        <span class="v"><input type="text" name="f-license" value="${escapeHtml(edits.license)}" placeholder="MIT, BSD-3-Clause, Apache-2.0, …"></span>
-      </div>
-
-      <div class="row">
-        <span class="k">Type</span>
-        <span class="v">
-          <select name="f-type">
-            ${TYPE_OPTIONS.map(t => `<option value="${t}" ${t === edits.type ? 'selected' : ''}>${t}</option>`).join('')}
-          </select>
-        </span>
-      </div>
-
-      <div class="row">
-        <span class="k">NQI centers</span>
-        <span class="v">
-          <div class="center-toggle" id="centerToggle">
-            ${ALL_CENTERS.map(c => `<button type="button" class="pill" data-center="${c}" aria-pressed="${edits.centers.has(c)}">${c}</button>`).join('')}
-          </div>
-        </span>
-      </div>
-
-      <div class="row">
-        <span class="k">DOE grant</span>
-        <span class="v"><input type="text" name="f-grant" value="${escapeHtml(edits.grant)}" placeholder="DE-SC0012704 (optional)"></span>
-      </div>
-
-      <div class="row">
-        <span class="k">Status</span>
-        <span class="v">
-          <label class="status-flag"><input type="radio" name="f-status" value="active" ${edits.status==='active'?'checked':''}> Active &nbsp;<span style="color:var(--ink-3)">(verified)</span></label>
-          &nbsp;&nbsp;
-          <label class="status-flag"><input type="radio" name="f-status" value="pending" ${edits.status==='pending'?'checked':''}> Pending &nbsp;<span style="color:var(--ink-3)">(needs review)</span></label>
-        </span>
-      </div>
-
-      <div class="row">
-        <span class="k">Topics</span>
-        <span class="v"><input type="text" name="f-topics" value="${escapeHtml(edits.topics)}" placeholder="Fault Tolerance, Control & Pulse, …"></span>
-      </div>
-
-      <div class="row">
-        <span class="k">Ack. excerpt</span>
-        <span class="v row-wide"><textarea name="f-ack" rows="5" placeholder="Paste or edit the acknowledgments / funding excerpt from the README or paper.">${escapeHtml(edits.ack)}</textarea></span>
-      </div>
-
-      ${isCorrection ? `
-      <div class="row">
-        <span class="k">Reason for change</span>
-        <span class="v row-wide"><textarea name="f-reason" rows="3" placeholder="What's wrong / what should change? (e.g., 'Center should be SQMS not QSC — paper acknowledges DE-AC02-07CH11359')">${escapeHtml(edits.reason)}</textarea></span>
-      </div>` : ''}
-
-      <div class="preview-submit">
-        <button type="button" class="btn" id="finalSubmit">${isCorrection ? 'Submit correction ↗' : 'Open pre-filled issue ↗'}</button>
-        <span class="hint">A maintainer reviews each ${isCorrection ? 'correction' : 'request'} before it's merged.</span>
-      </div>
-    `;
-
-    // Wire change handlers
-    preview.querySelector('[name=f-description]').addEventListener('input', e => edits.description = e.target.value);
-    preview.querySelector('[name=f-license]').addEventListener('input', e => edits.license = e.target.value);
-    preview.querySelector('[name=f-type]').addEventListener('change', e => edits.type = e.target.value);
-    preview.querySelector('[name=f-grant]').addEventListener('input', e => edits.grant = e.target.value);
-    preview.querySelector('[name=f-topics]').addEventListener('input', e => edits.topics = e.target.value);
-    preview.querySelector('[name=f-ack]').addEventListener('input', e => edits.ack = e.target.value);
-    preview.querySelectorAll('[name=f-status]').forEach(r => r.addEventListener('change', e => edits.status = e.target.value));
-    preview.querySelectorAll('#centerToggle .pill').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const c = btn.dataset.center;
-        if (edits.centers.has(c)) edits.centers.delete(c);
-        else edits.centers.add(c);
-        btn.setAttribute('aria-pressed', edits.centers.has(c) ? 'true' : 'false');
-      });
-    });
-    const resetBtn = preview.querySelector('#resetEdits');
-    if (resetBtn) resetBtn.addEventListener('click', () => renderPreview(r));
-    const reasonField = preview.querySelector('[name=f-reason]');
-    if (reasonField) reasonField.addEventListener('input', e => edits.reason = e.target.value);
-    preview.querySelector('#finalSubmit').addEventListener('click', () => { openIssue(); close(); });
-  }
-
-  async function analyze() {
-    const parsed = parseGithubUrl(urlInput.value);
-    if (!parsed) {
-      renderError('Please paste a valid GitHub repository URL.');
-      return;
-    }
-    analyzeBtn.disabled = true;
-    preview.classList.add('shown');
-    preview.innerHTML = `<div><span class="spinner"></span> Fetching repository metadata…</div>`;
-    try {
-      const repo = await fetchJSON(`https://api.github.com/repos/${parsed.owner}/${parsed.repo}`);
-      const branch = repo.default_branch || 'main';
-      preview.innerHTML = `<div><span class="spinner"></span> Scanning README for NQI acknowledgments…</div>`;
-      const readme = await fetchReadme(parsed.owner, parsed.repo, branch);
-
-      const combinedText = (repo.description || '') + ' ' + (repo.topics || []).join(' ') + ' ' + readme;
-      const centers = detectCenters(combinedText);
-      const grants = detectGrants(combinedText);
-      const inferredType = detectType(combinedText);
-      const inferredTopics = detectTopics(combinedText);
-      const ackSnippet = findAckSnippet(readme);
-
-      renderPreview({
-        owner: parsed.owner,
-        name: parsed.repo,
-        url: repo.html_url,
-        description: repo.description || '',
-        license: repo.license?.spdx_id || repo.license?.name || '',
-        language: repo.language || '',
-        stars: repo.stargazers_count,
-        updated: (repo.pushed_at || '').slice(0, 10),
-        topics: repo.topics || [],
-        readmeLength: readme.length,
-        centers, grants, inferredType, inferredTopics, ackSnippet,
-      });
-    } catch (err) {
-      renderError(err.message || 'Could not analyze that repository.');
-    } finally {
-      analyzeBtn.disabled = false;
-    }
-  }
-
-  function openIssue() {
-    if (!lastResult || !edits) return;
-    const r = lastResult;
-    const isCorrection = mode === 'correction';
-    const centersArr = Array.from(edits.centers);
-    const topicsArr = edits.topics
-      .split(',').map(s => s.trim()).filter(Boolean);
-
-    const ackBlock = edits.ack
-      ? `\n> ${edits.ack.replace(/\n/g, '\n> ').slice(0, 1500)}\n`
-      : '\n_No acknowledgments excerpt provided._\n';
-
-    const entryId = r._existingId
-      || r.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-
-    const entry = {
-      id: entryId,
-      name: r.name,
-      tagline: edits.description.slice(0, 80) || "",
-      description: edits.description,
-      url: r.url,
-      centers: centersArr,
-      primary_institutions: [],
-      type: edits.type,
-      license: edits.license || "see repo",
-      status: edits.status,
-      verified: edits.status === 'active' && centersArr.length > 0,
-      grant: edits.grant || undefined,
-      topics: topicsArr.length ? topicsArr : undefined,
-    };
-    Object.keys(entry).forEach(k => entry[k] === undefined && delete entry[k]);
-
-    let body, title, label;
-
-    if (isCorrection) {
-      label = 'correction-request';
-      title = `Update: ${r.name}`;
-      body = [
-        `**Entry ID:** \`${entryId}\``,
-        `**Repository:** ${r.url}`,
-        ``,
-        `### Reason for change`,
-        edits.reason ? `> ${edits.reason.replace(/\n/g, '\n> ')}` : '_(no reason provided)_',
-        ``,
-        `### Submitted values`,
-        `- **Description:** ${edits.description || '—'}`,
-        `- **License:** ${edits.license || '—'}`,
-        `- **Type:** ${edits.type}`,
-        `- **NQI centers:** ${centersArr.length ? centersArr.join(', ') : '_none_'}`,
-        `- **DOE grant:** ${edits.grant || '_none_'}`,
-        `- **Status:** ${edits.status}`,
-        `- **Topics:** ${topicsArr.join(', ') || '—'}`,
-        ``,
-        `### Acknowledgments excerpt`,
-        ackBlock,
-        `### Updated JSON entry (drop-in replacement)`,
-        '```json',
-        JSON.stringify(entry, null, 2),
-        '```',
-        ``,
-        `<!-- Submitted via the NQI Software archive correction form -->`,
-      ].join('\n');
-    } else {
-      label = 'software-request';
-      title = `Add: ${r.name}` + (centersArr.length ? ` (${centersArr.join(', ')})` : ` — review needed`);
-      const detectedSummary = [
-        `_Detected by auto-analysis:_ centers=${r.centers.join(',')||'none'}, grants=${r.grants.join(',')||'none'}, type=${r.inferredType}`,
-        `_Submitter-edited:_ centers=${centersArr.join(',')||'none'}, status=${edits.status}, type=${edits.type}`,
-      ].join('\n');
-      body = [
-        `**Repository:** ${r.url}`,
-        `**Description:** ${edits.description || '—'}`,
-        `**License:** ${edits.license || '—'}`,
-        `**Language:** ${r.language || '—'}`,
-        `**Type:** ${edits.type}`,
-        `**NQI centers:** ${centersArr.length ? centersArr.join(', ') : '_none — needs maintainer review_'}`,
-        `**DOE grant:** ${edits.grant || '_none_'}`,
-        `**Status:** ${edits.status}`,
-        `**Topics:** ${topicsArr.join(', ') || '—'}`,
-        ``,
-        `### Acknowledgments excerpt`,
-        ackBlock,
-        `### Proposed JSON entry`,
-        '```json',
-        JSON.stringify(entry, null, 2),
-        '```',
-        ``,
-        detectedSummary,
-        ``,
-        `<!-- Submitted via the NQI Software archive submission form -->`,
-      ].join('\n');
-    }
-
-    const url = `https://github.com/${REPO}/issues/new?` +
-      `labels=${label}&` +
-      `title=${encodeURIComponent(title)}&` +
-      `body=${encodeURIComponent(body)}`;
-    window.open(url, '_blank', 'noopener');
-  }
-
-  analyzeBtn.addEventListener('click', analyze);
-  urlInput.addEventListener('keydown', e => { if (e.key === 'Enter') analyze(); });
+  }));
+}
+
+[qEl,fCenter,fType,fStatus].forEach(el=>el.addEventListener('input',filter));
+function analyze(){
+  const byCenter={};
+  data.forEach(d=>(d.centers||[]).forEach(c=>{byCenter[c]=(byCenter[c]||0)+1;}));
+}
+render(data);
+analyze();
 })();
 </script>
 
