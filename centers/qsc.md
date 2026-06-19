@@ -43,6 +43,17 @@ Python library for constructing and benchmarking fault-tolerant primitives (memo
 - **License:** CC-BY-4.0
 - **Status:** active
 
+### [LightStim](https://github.com/QuTone/LightStim)
+
+A modular QEC framework for building fault-tolerant circuits, running simulations, and comparing logical error rates across codes.
+
+- **Type:** benchmark
+- **Primary institution(s):** —
+- **Acknowledgment:** QSC (maintainer-confirmed; acknowledgment pending in repo/paper)
+- **Paper:** [arXiv:2604.21472](https://arxiv.org/abs/2604.21472)
+- **License:** Apache-2.0
+- **Status:** pending
+
 ### [nwqec](https://github.com/pnnl/nwqec)
 
 Toolkit for fault-tolerant quantum circuit transpilation and T-count optimization.
