@@ -9,6 +9,18 @@ QSC is building "the first fault-tolerant ecosystem for hybrid quantum / high-pe
 
 ## Software
 
+### [calibration-conditioned-decoding](https://github.com/Samuelstein1224/calibration-conditioned-decoding)
+
+Calibration-conditioned FiLM decoders for QEC on IBM repetition-code experiments.
+
+- **Type:** other
+- **Primary institution(s):** Pacific Northwest National Laboratory
+- **Acknowledgment:** "This material is based upon work supported by the U.S. Department of Energy, Office of Science, National Quantum Information Science Research Centers, Quantum Science Center (QSC)." (README)
+- **Grant:** DE-AC05-76RL01830
+- **License:** Apache-2.0
+- **Topics:** Error Correction, Qubit Control
+- **Status:** active
+
 ### [DM-Sim](https://github.com/ORNL-QCI/DM-Sim)
 
 GPU-cluster density-matrix simulator for noisy quantum circuits.
